@@ -49,6 +49,9 @@
             <div class="control-inline">
               <button id="autoToggle" class="dropdown-toggle" aria-pressed="false">Auto Move: Off</button>
             </div>
+            <div class="control-inline">
+              <button id="instructionsBtn" class="dropdown-toggle" aria-haspopup="dialog" aria-controls="instructionsModal">Instructions</button>
+            </div>
             <!-- startBtn moved to the left panel under Hint/Reveal -->
           </div>
         </div>
@@ -87,7 +90,7 @@
 
       <section class="right">
         <h2 class="label">Target Letter</h2>
-        <div id="letterDisplay" class="big-letter">?</div>
+        <div id="letterDisplay" class="pill big-letter">?</div>
 
         <div id="exampleArea" class="example hidden">
           <div class="example-title">Example Answer</div>
@@ -96,7 +99,24 @@
       </section>
     </main>
 
-    <footer class="app-footer">Simple Fast Facts practice — local, no server required (use a simple HTTP server for full functionality)</footer>
+    <footer class="app-footer">Simple Fast Facts practice</footer>
+
+  <!-- Instructions modal -->
+  <div id="instructionsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="instructionsTitle">
+    <div class="modal-backdrop" data-backdrop></div>
+    <div class="modal-content" role="document">
+      <button class="modal-close" id="instructionsCloseBtn" aria-label="Close">✕</button>
+      <h3 id="instructionsTitle">How to use Fast Facts Simulator</h3>
+      <p>1. Choose a Practice Area (category), Timer, and Mode from the controls in the header.</p>
+      <p>2. A target letter will appear on the right and a category will appear on the left.</p>
+      <p>3. Type answers that start with the target letter into the input. Validation is live — correct answers are accepted instantly.</p>
+      <p>4. Use <strong>Hint</strong> to reveal a progressive prefix; <strong>Reveal</strong> shows the canonical answer and examples.</p>
+      <p>5. When the round ends (correct answer or time expired) the Hint button becomes <strong>Next Round</strong>.</p>
+      <p>6. Toggle <strong>Auto Move</strong> to automatically advance after a short countdown when a round finishes.</p>
+      <p>Keyboard shortcuts: <strong>Enter</strong> to submit, <strong>H</strong> for hint, <strong>R</strong> to reveal, <strong>N</strong> for next when available.</p>
+      <div class="modal-actions"><button id="instructionsDoneBtn">Got it</button></div>
+    </div>
+  </div>
 
     <script src="app.js"></script>
   </body>

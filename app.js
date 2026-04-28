@@ -145,6 +145,11 @@ const refs = {
   letterDisplay: document.getElementById('letterDisplay'),
   exampleAnswer: document.getElementById('exampleAnswer'),
   exampleArea: document.getElementById('exampleArea')
+  ,
+  instructionsBtn: document.getElementById('instructionsBtn'),
+  instructionsModal: document.getElementById('instructionsModal'),
+  instructionsCloseBtn: document.getElementById('instructionsCloseBtn'),
+  instructionsDoneBtn: document.getElementById('instructionsDoneBtn')
 };
 
 // Theme toggle element (added to header)
@@ -637,6 +642,32 @@ if(refs.autoToggle){
   });
 }
 
+// Instructions modal wiring
+if(refs.instructionsBtn && refs.instructionsModal){
+  const openInstructions = ()=>{
+    refs.instructionsModal.classList.remove('hidden');
+    // focus the close button for accessibility
+    if(refs.instructionsCloseBtn) refs.instructionsCloseBtn.focus();
+  };
+  const closeInstructions = ()=>{
+    refs.instructionsModal.classList.add('hidden');
+    if(refs.instructionsBtn) refs.instructionsBtn.focus();
+  };
+
+  refs.instructionsBtn.addEventListener('click', openInstructions);
+  if(refs.instructionsCloseBtn) refs.instructionsCloseBtn.addEventListener('click', closeInstructions);
+  if(refs.instructionsDoneBtn) refs.instructionsDoneBtn.addEventListener('click', closeInstructions);
+  // clicking the backdrop closes
+  const backdrop = refs.instructionsModal.querySelector('[data-backdrop]');
+  if(backdrop) backdrop.addEventListener('click', closeInstructions);
+  // ESC key closes modal
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && !refs.instructionsModal.classList.contains('hidden')){
+      closeInstructions();
+    }
+  });
+}
+
 refs.revealBtn.addEventListener('click', ()=>{
   revealAnswer('User revealed answer');
 });
@@ -644,6 +675,13 @@ refs.revealBtn.addEventListener('click', ()=>{
 refs.answerInput.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter'){
     e.preventDefault();
+    // If the hint button is currently acting as Next Round, advance instead of submitting
+    if(refs.hintBtn && refs.hintBtn.dataset && refs.hintBtn.dataset.mode === 'next'){
+      clearNextTimeout();
+      restoreActionButtons();
+      nextRound();
+      return;
+    }
     submitAnswer();
   }
 });
@@ -668,36 +706,7 @@ refs.answerInput.addEventListener('input', ()=>{
   }
 });
 
-// keyboard shortcuts: H for hint, R for reveal, N for next
-document.addEventListener('keydown', (e)=>{
-  const active = document.activeElement;
-  const isTypingActive = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && !active.disabled;
-  // If the user is actively typing in an enabled field, don't intercept keys (Enter is handled there).
-  if(isTypingActive) return;
-
-  // If the Hint button has been transformed into Next Round, allow Enter to trigger it.
-  if(e.key === 'Enter'){
-    if(refs.hintBtn && refs.hintBtn.dataset && refs.hintBtn.dataset.mode === 'next'){
-      refs.hintBtn.click();
-      e.preventDefault();
-      return;
-    }
-  }
-
-  if(e.key.toLowerCase() === 'h') {
-    if(refs.hintBtn) refs.hintBtn.click();
-  }
-  if(e.key.toLowerCase() === 'r') {
-    if(refs.revealBtn) refs.revealBtn.click();
-  }
-  if(e.key.toLowerCase() === 'n') {
-    if(refs.hintBtn && refs.hintBtn.dataset && refs.hintBtn.dataset.mode === 'next'){
-      refs.hintBtn.click();
-    }else{
-      nextRound();
-    }
-  }
-});
+// Global keyboard shortcuts removed — only Enter is supported (handled on the answer input).
 
 // Theme toggle wiring: toggle light mode class on body and update icon
 if(refs.themeToggle){
