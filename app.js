@@ -474,21 +474,9 @@ function hideExample(){
  * with a Next Round button (no automatic reveal or 'time expired' message).
  */
 function handleTimeout(){
-  stopTimer();
-  // disable typing
-  refs.answerInput.disabled = true;
-  // transform hint -> Next Round and hide reveal
-  if(refs.hintBtn) {
-    refs.hintBtn.dataset.mode = 'next';
-    refs.hintBtn.textContent = 'Next Round';
-    refs.hintBtn.disabled = false;
-    refs.hintBtn.classList.add('next-mode');
-  }
-  if(refs.revealBtn) refs.revealBtn.style.display = 'none';
-  // if auto-move enabled, schedule automatic next round with countdown
-  if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
-    startAutoCountdown(AUTO_MOVE_DELAY_MS);
-  }
+  // When time expires, reveal the canonical answer and show examples,
+  // then transform the Hint/Reveal buttons to the Next Round state.
+  revealAnswer('Time expired');
 }
 
 /**
@@ -741,10 +729,7 @@ if(refs.categoryToggle && refs.categoryMenu && refs.categoryList){
     const val = li.dataset.value || '__random__';
     refs.categoryToggle.dataset.value = val;
     refs.categoryToggle.textContent = (val === '__random__') ? 'Random Category ▾' : (li.textContent + ' ▾');
-    // close menu
-    refs.categoryMenu.setAttribute('aria-hidden', 'true');
-    refs.categoryMenu.style.display = 'none';
-    refs.categoryToggle.setAttribute('aria-expanded', 'false');
+    // keep menu open (do not close on selection)
     // persist and start a new round when the category filter is changed
     saveFiltersToStorage();
     nextRound();
@@ -786,7 +771,7 @@ if(refs.timerToggle && refs.timerMenu && refs.timerList){
     const val = li.dataset.value || '30';
     refs.timerToggle.dataset.value = val;
     refs.timerToggle.textContent = `${val}s ▾`;
-    refs.timerMenu.setAttribute('aria-hidden','true'); refs.timerMenu.style.display='none'; refs.timerToggle.setAttribute('aria-expanded','false');
+    // keep menu open (do not close on selection)
     // persist and start a new round when timer filter is changed
     saveFiltersToStorage();
     nextRound();
@@ -808,7 +793,7 @@ if(refs.modeToggle && refs.modeMenu && refs.modeList){
     const val = li.dataset.value || 'easy';
     refs.modeToggle.dataset.value = val;
     refs.modeToggle.textContent = `Mode: ${li.textContent} ▾`;
-    refs.modeMenu.setAttribute('aria-hidden','true'); refs.modeMenu.style.display='none'; refs.modeToggle.setAttribute('aria-expanded','false');
+    // keep menu open (do not close on selection)
     // persist and start a new round when mode filter is changed
     saveFiltersToStorage();
     nextRound();
