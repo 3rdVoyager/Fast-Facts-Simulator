@@ -56,6 +56,9 @@ const state = {
   }
 };
 
+// Auto-move default delay (ms)
+const AUTO_MOVE_DELAY_MS = 5000;
+
 // ----------------------------- DOM references -----------------------------
 const refs = {
   // optional native selects (kept for fallback)
@@ -382,12 +385,7 @@ function revealAnswer(reason){
   // transform hint -> Next Round so the user can advance after revealing
   transformButtonsToNext();
   if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
-    clearNextTimeout();
-    state.current.nextTimeout = setTimeout(()=>{
-      state.current.nextTimeout = null;
-      restoreActionButtons();
-      nextRound();
-    }, 2000);
+    startAutoCountdown(AUTO_MOVE_DELAY_MS);
   }
 }
 
@@ -426,14 +424,9 @@ function handleTimeout(){
     refs.hintBtn.classList.add('next-mode');
   }
   if(refs.revealBtn) refs.revealBtn.style.display = 'none';
-  // if auto-move enabled, schedule automatic next round
+  // if auto-move enabled, schedule automatic next round with countdown
   if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
-    clearNextTimeout();
-    state.current.nextTimeout = setTimeout(()=>{
-      state.current.nextTimeout = null;
-      restoreActionButtons();
-      nextRound();
-    }, 2000);
+    startAutoCountdown(AUTO_MOVE_DELAY_MS);
   }
 }
 
@@ -464,6 +457,8 @@ function revertButtonsFromNext(){
  * Restore the Hint/Reveal buttons (remove Next Round button if present).
  */
 function restoreActionButtons(){
+  // cancel any pending auto-advance and revert transforms
+  clearNextTimeout();
   // revert any Next-mode transforms
   revertButtonsFromNext();
   if(refs.hintBtn){ refs.hintBtn.style.display = 'inline-block'; refs.hintBtn.disabled = (state.current.hintCap<=0); }
@@ -513,14 +508,9 @@ function handleCorrectMatch(matched, reason){
 
   // transform the hint button into Next Round and wait for user action
   transformButtonsToNext();
-  // if auto-move is enabled, schedule a short automatic advance
+  // if auto-move is enabled, schedule a short automatic advance with countdown
   if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
-    clearNextTimeout();
-    state.current.nextTimeout = setTimeout(()=>{
-      state.current.nextTimeout = null;
-      restoreActionButtons();
-      nextRound();
-    }, 2000);
+    startAutoCountdown(AUTO_MOVE_DELAY_MS);
   }
 }
 
@@ -529,6 +519,37 @@ function clearNextTimeout(){
     clearTimeout(state.current.nextTimeout);
     state.current.nextTimeout = null;
   }
+  if(state.current.nextCountdownInterval){
+    clearInterval(state.current.nextCountdownInterval);
+    state.current.nextCountdownInterval = null;
+  }
+}
+
+/**
+ * Start the auto-move countdown and update the Hint/Next button label.
+ * @param {number} ms - milliseconds until auto-advance
+ */
+function startAutoCountdown(ms){
+  clearNextTimeout();
+  if(!refs.hintBtn) return;
+  const end = Date.now() + ms;
+  // schedule the actual advance
+  state.current.nextTimeout = setTimeout(()=>{
+    state.current.nextTimeout = null;
+    clearNextTimeout();
+    restoreActionButtons();
+    nextRound();
+  }, ms);
+  // update label frequently to show seconds remaining
+  state.current.nextCountdownInterval = setInterval(()=>{
+    const remaining = Math.max(0, end - Date.now());
+    const sec = Math.ceil(remaining/1000);
+    if(refs.hintBtn){ refs.hintBtn.textContent = `Next Round (${sec}s)`; }
+    if(remaining <= 0){
+      clearInterval(state.current.nextCountdownInterval);
+      state.current.nextCountdownInterval = null;
+    }
+  }, 150);
 }
 
 function clearFeedback(){
@@ -546,7 +567,8 @@ if(refs.startBtn){
 refs.hintBtn.addEventListener('click', ()=>{
   // If hint button is in 'next' mode, start next round instead of giving a hint
   if(refs.hintBtn.dataset && refs.hintBtn.dataset.mode === 'next'){
-    // revert buttons then start next
+    // cancel pending auto-advance, revert buttons then start next
+    clearNextTimeout();
     restoreActionButtons();
     nextRound();
     return;
