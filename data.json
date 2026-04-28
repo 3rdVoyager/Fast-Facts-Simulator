@@ -1,79 +1,327 @@
 {
+  "Fields of Science": {
+    "A": ["Anthropology", "Astronomy"],
+    "B": ["Botany", "Biology"],
+    "C": ["Chemistry", "Computer Science"],
+    "D": ["Dermatology", "Data Science"],
+    "E": ["Ecology", "Engineering"],
+    "F": ["Forensics", "Physics"],
+    "G": ["Geology", "Genetics"],
+    "H": ["Hydrology", "Health Science"],
+    "I": ["Immunology", "Information Science"],
+    "M": ["Meteorology", "Microbiology"],
+    "P": ["Physics", "Psychology"],
+    "V": ["Virology", "Veterinary Science"],
+    "Z": ["Zoology"]
+  },
+
   "Scientific Tools": {
-    "V": ["Voltmeter", "Vernier caliper"],
-    "T": ["Thermometer", "Tongs", "Test tube"],
-    "R": ["Ruler", "Rain gauge"],
-    "B": ["Bunsen burner", "Beaker"]
+    "A": ["Ammeter", "Aspirator"],
+    "B": ["Beaker", "Balance"],
+    "C": ["Calorimeter", "Centrifuge"],
+    "D": ["Dynamometer", "Dissecting kit"],
+    "E": ["Erlenmeyer flask", "Eyedropper"],
+    "F": ["Forceps", "Flask"],
+    "G": ["Graduated cylinder", "Glass slide"],
+    "H": ["Hydrometer", "Hygrometer"],
+    "M": ["Microscope", "Magnifier"],
+    "O": ["Oscilloscope", "Oven (lab)"],
+    "P": ["Pipette", "Petri dish"],
+    "V": ["Voltmeter", "Vernier caliper"]
   },
-  "Mammals": {
-    "B": ["Bear", "Bat", "Bison"],
-    "C": ["Cat", "Cow", "Cheetah"],
-    "D": ["Dog", "Deer"],
-    "E": ["Elephant"]
-  },
-  "Geometry Shapes": {
-    "C": ["Circle", "Cone", "Cylinder"],
-    "S": ["Square", "Sphere", "Semicircle"],
-    "T": ["Triangle", "Trapezoid"]
-  },
-  "Human Body Parts": {
-    "H": ["Heart", "Hand"],
-    "L": ["Liver", "Lung"],
-    "S": ["Stomach", "Spleen"],
-    "B": ["Brain", "Bone"]
-  },
+
   "Trees": {
-    "O": ["Oak"],
+    "A": ["Alder", "Apple"],
+    "B": ["Birch", "Beech"],
+    "C": ["Cedar", "Cherry"],
+    "D": ["Dogwood", "Douglas fir"],
+    "E": ["Elm", "Eucalyptus"],
+    "M": ["Maple", "Magnolia"],
     "P": ["Pine", "Poplar"],
-    "M": ["Maple"],
-    "W": ["Willow"]
+    "O": ["Oak", "Olive"]
   },
-  "Planets": {
-    "M": ["Mercury", "Mars"],
+
+  "Flowers": {
+    "A": ["Azalea", "Aster"],
+    "B": ["Begonia", "Bluebell"],
+    "C": ["Carnation", "Chrysanthemum"],
+    "D": ["Daisy", "Daffodil"],
+    "F": ["Foxglove", "Freesia"],
+    "J": ["Jasmine", "Jonquil"],
+    "L": ["Lilac", "Lily"],
+    "M": ["Marigold", "Mum"],
+    "R": ["Rose", "Ranunculus"],
+    "S": ["Sunflower", "Snapdragon"],
+    "T": ["Tulip", "Tiger lily"]
+  },
+
+  "Mammals": {
+    "A": ["Aardvark", "Armadillo"],
+    "B": ["Bat", "Bear"],
+    "C": ["Cat", "Cow"],
+    "D": ["Dog", "Deer"],
+    "E": ["Elephant", "Echidna"],
+    "F": ["Fox", "Ferret"],
+    "G": ["Gorilla", "Giraffe"],
+    "H": ["Horse", "Hamster"],
+    "K": ["Kangaroo", "Koala"],
+    "L": ["Lion", "Lemur"],
+    "M": ["Moose", "Meerkat"],
+    "Z": ["Zebra"]
+  },
+
+  "Insects": {
+    "A": ["Ant", "Aphid"],
+    "B": ["Beetle", "Butterfly"],
+    "C": ["Cicada", "Caterpillar"],
+    "D": ["Dragonfly", "Damselfly"],
+    "F": ["Firefly", "Fruit fly"],
+    "G": ["Grasshopper", "Gnat"],
+    "H": ["Honeybee", "Horsefly"],
+    "K": ["Katydid", "Kermes"],
+    "M": ["Moth", "Mosquito"],
+    "T": ["Termite", "Tick"]
+  },
+
+  "Birds": {
+    "A": ["Albatross", "Avocet"],
+    "B": ["Blue jay", "Bluebird"],
+    "E": ["Eagle", "Egret"],
+    "H": ["Hawk", "Heron"],
+    "J": ["Jay", "Junco"],
+    "L": ["Lark", "Loon"],
+    "S": ["Sparrow", "Swallow"],
+    "T": ["Toucan", "Tern"],
+    "W": ["Woodpecker", "Warbler"]
+  },
+
+  "Fish": {
+    "A": ["Anchovy", "Angelfish"],
+    "B": ["Bass", "Bluefish"],
+    "C": ["Carp", "Catfish"],
+    "H": ["Haddock", "Herring"],
+    "M": ["Mackerel", "Marlin"],
+    "P": ["Perch", "Pufferfish"],
+    "S": ["Salmon", "Sardine"]
+  },
+
+  "Amphibians": {
+    "A": ["Axolotl", "Ambystoma"],
+    "B": ["Bullfrog", "Bombina (fire-bellied)"],
+    "F": ["Fire-bellied toad", "Frog (generic)"],
+    "M": ["Mudpuppy", "Newt"],
+    "T": ["Tailed frog"]
+  },
+
+  "Reptiles": {
+    "A": ["Anole", "Alligator"],
+    "B": ["Boa", "Box turtle"],
+    "C": ["Cobra", "Crocodile"],
+    "G": ["Gila monster", "Gecko"],
+    "K": ["Komodo dragon", "King cobra"],
+    "T": ["Tegu", "Turtle"]
+  },
+
+  "Human Body Parts": {
+    "A": ["Arm", "Ankle"],
+    "B": ["Brain", "Back"],
+    "E": ["Ear", "Elbow"],
+    "F": ["Foot", "Fingers"],
+    "H": ["Hand", "Hip"],
+    "J": ["Jaw", "Joints"],
+    "L": ["Leg", "Lip"],
+    "T": ["Toe", "Throat"]
+  },
+
+  "Human Organs": {
+    "A": ["Adrenal gland", "Appendix"],
+    "B": ["Brain", "Bladder"],
+    "E": ["Esophagus", "Eye (organ)"],
+    "H": ["Heart", "Hypothalamus"],
+    "L": ["Lung", "Liver"],
+    "P": ["Pancreas", "Pituitary gland"]
+  },
+
+  "Human Bones": {
+    "A": ["Atlas", "Ankle bones (tarsals)"],
+    "F": ["Femur", "Fibula"],
+    "H": ["Humerus", "Hamate"],
+    "P": ["Patella", "Pelvis"],
+    "T": ["Tibia", "Talus"]
+  },
+
+  "Human Senses": {
+    "H": ["Hearing"],
+    "S": ["Smell"],
+    "T": ["Taste"],
+    "V": ["Vision", "Vestibular (balance)"]
+  },
+
+  "Part of a Cell": {
+    "A": ["Actin", "Antibody (cell product)"],
+    "G": ["Golgi apparatus", "Genome (DNA)"],
+    "M": ["Mitochondrion", "Membrane"],
+    "N": ["Nucleolus", "Nucleus"]
+  },
+
+  "Viral Diseases": {
+    "A": ["Adenovirus", "Adeno-associated virus"],
+    "B": ["Bird flu", "Bronchitis (viral)"],
+    "C": ["Coxsackie", "COVID-19"],
+    "F": ["Flu", "FMD (foot-and-mouth)"] ,
+    "H": ["Hepatitis", "Herpes"],
+    "S": ["SARS", "Smallpox (viral historically)"],
+    "Z": ["Zika", "Zoonotic flu"]
+  },
+
+  "Planets & Moons": {
+    "M": ["Mercury", "Mars", "Moon"],
     "V": ["Venus"],
     "E": ["Earth"],
-    "J": ["Jupiter"]
+    "J": ["Jupiter"],
+    "S": ["Saturn"],
+    "U": ["Uranus"],
+    "N": ["Neptune"]
   },
-  "Elements": {
-    "H": ["Hydrogen"],
-    "O": ["Oxygen"],
-    "C": ["Carbon"],
-    "N": ["Nitrogen"]
+
+  "Stars & Astronomy": {
+    "A": ["Altair", "Achernar"],
+    "B": ["Betelgeuse", "Bellatrix"],
+    "D": ["Deneb", "Dubhe"],
+    "P": ["Polaris", "Procyon"],
+    "S": ["Sirius", "Spica"]
   },
-  "Weather Terms": {
-    "R": ["Rain", "Rainbow"],
-    "S": ["Snow", "Sleet", "Storm"],
-    "W": ["Wind", "Weather front"]
+
+  "Constellations": {
+    "A": ["Andromeda", "Aquarius"],
+    "B": ["Bootes", "Boötes"],
+    "C": ["Canis Major", "Cassiopeia"],
+    "D": ["Draco", "Delphinus"],
+    "S": ["Scorpius", "Sagittarius"]
   },
-  "Rocks & Minerals": {
-    "G": ["Granite"],
-    "Q": ["Quartz"],
-    "S": ["Schist", "Sandstone"]
+
+  "Unmanned Space Missions": {
+    "H": ["Hayabusa", "Hayabusa2"],
+    "N": ["New Horizons"],
+    "O": ["OSIRIS-REx", "Orbiters"],
+    "P": ["Pioneer", "Phoenix"]
   },
-  "Insects": {
-    "B": ["Bee", "Butterfly"],
-    "A": ["Ant"],
-    "G": ["Grasshopper"]
+
+  "Manned Space Missions": {
+    "A": ["Apollo 11", "Apollo 13"],
+    "C": ["Challenger", "Columbia"],
+    "I": ["ISS"],
+    "S": ["Soyuz", "Shuttle"]
   },
-  "Birds": {
-    "S": ["Sparrow", "Swallow"],
-    "E": ["Eagle"],
-    "O": ["Owl"]
+
+  "Landforms": {
+    "C": ["Canyon", "Cliff"],
+    "D": ["Delta", "Dune"],
+    "E": ["Escarpment", "Estuary"],
+    "F": ["Fjord", "Floodplain"],
+    "M": ["Mesa", "Mountain"]
   },
-  "Simple Machines": {
-    "L": ["Lever"],
-    "P": ["Pulley"],
-    "I": ["Inclined plane"]
-  },
-  "Measurements": {
-    "M": ["Meter"],
-    "G": ["Gram"],
-    "S": ["Second"],
-    "L": ["Liter"]
-  },
-  "Oceans": {
+
+  "Oceans & Seas": {
+    "A": ["Atlantic", "Arctic"],
+    "C": ["Caribbean", "Coral Sea"],
+    "I": ["Indian Ocean"],
     "P": ["Pacific"],
-    "A": ["Atlantic"],
-    "I": ["Indian"]
+    "S": ["South China Sea", "Southern Ocean"]
+  },
+
+  "Natural Disasters": {
+    "A": ["Avalanche", "Aftershock"],
+    "E": ["Earthquake"],
+    "F": ["Flood"],
+    "H": ["Hurricane", "Heatwave"],
+    "T": ["Tornado", "Tsunami"]
+  },
+
+  "Rocks & Minerals": {
+    "A": ["Andesite", "Arkose"],
+    "B": ["Basalt", "Bituminous coal"],
+    "G": ["Granite", "Gneiss"],
+    "Q": ["Quartz", "Quartzite"],
+    "S": ["Sandstone", "Shale"]
+  },
+
+  "Gems": {
+    "A": ["Amethyst", "Alexandrite"],
+    "B": ["Beryl", "Bixbite"],
+    "C": ["Citrine", "Coral"],
+    "E": ["Emerald", "Eudialyte"],
+    "R": ["Ruby", "Rhodonite"]
+  },
+
+  "Geologic Time & Fossils": {
+    "A": ["Archean", "Albian"],
+    "C": ["Cambrian", "Cretaceous"],
+    "M": ["Mississippian", "Miocene"],
+    "N": ["Neogene", "Neolithic (informal)"],
+    "P": ["Pennsylvanian", "Permian"]
+  },
+
+  "Dinosaur Fossils": {
+    "A": ["Allosaurus", "Apatosaurus"],
+    "B": ["Brachiosaurus", "Baryonyx"],
+    "D": ["Diplodocus", "Deinonychus"],
+    "P": ["Plateosaurus", "Pachycephalosaurus"],
+    "T": ["Tyrannosaurus", "Triceratops"]
+  },
+
+  "Weather Terms": {
+    "A": ["Anemometer", "Atmosphere"],
+    "C": ["Cloud", "Cyclone"],
+    "F": ["Fog", "Frost"],
+    "R": ["Rain", "Rainbow"],
+    "S": ["Snow", "Sleet"]
+  },
+
+  "Maryland Counties & Waterways": {
+    "B": ["Baltimore", "Baltimore County"],
+    "C": ["Calvert", "Carroll"],
+    "M": ["Montgomery", "Montgomery County"],
+    "P": ["Patapsco River", "Potomac River"],
+    "S": ["Susquehanna", "Severn River"]
+  },
+
+  "Energy & Electricity": {
+    "B": ["Battery", "Biomass"],
+    "C": ["Capacitor", "Coal"],
+    "F": ["Fuel oil", "Fuel cell"],
+    "M": ["Methane", "Motor"],
+    "W": ["Watt", "Wind"]
+  },
+
+  "Element Names": {
+    "H": ["Hydrogen", "Helium"],
+    "C": ["Carbon", "Calcium"],
+    "O": ["Oxygen", "Osmium"],
+    "N": ["Nitrogen", "Neon"],
+    "S": ["Sulfur", "Sodium"]
+  },
+
+  "Element Symbols": {
+    "H": ["H"],
+    "C": ["C"],
+    "O": ["O"],
+    "N": ["N"],
+    "Fe": ["Fe"],
+    "Au": ["Au"]
+  },
+
+  "Acids": {
+    "A": ["Acetic acid", "Ascorbic acid (Vitamin C)"],
+    "H": ["Hydrochloric acid", "Hydrofluoric acid"],
+    "S": ["Sulfuric acid", "Stearic acid"],
+    "C": ["Citric acid", "Carbonic acid"]
+  },
+
+  "Nutrition Chemicals & Minerals": {
+    "V": ["Vitamin C", "Vitamin D"],
+    "F": ["Folic acid", "Fluoride"],
+    "G": ["Glucose", "Glycogen"],
+    "M": ["Magnesium", "Manganese"]
   }
 }

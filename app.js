@@ -89,6 +89,8 @@ const refs = {
 
 // Theme toggle element (added to header)
 refs.themeToggle = document.getElementById('themeToggle');
+// Auto-move toggle (header)
+refs.autoToggle = document.getElementById('autoToggle');
 
 /**
  * Populate custom timer and mode dropdowns (if present).
@@ -123,6 +125,69 @@ function populateControls(){
   }
 }
 
+  /**
+   * Save current filter settings (category, timer, mode) to localStorage.
+   */
+  function saveFiltersToStorage(){
+    try{
+      const obj = {
+        category: (refs.categorySelect && refs.categorySelect.value) ? refs.categorySelect.value : (refs.categoryToggle && refs.categoryToggle.dataset.value) ? refs.categoryToggle.dataset.value : '__random__',
+        timer: (refs.timerSelect && refs.timerSelect.value) ? refs.timerSelect.value : (refs.timerToggle && refs.timerToggle.dataset.value) ? refs.timerToggle.dataset.value : '30',
+        mode: (refs.modeSelect && refs.modeSelect.value) ? refs.modeSelect.value : (refs.modeToggle && refs.modeToggle.dataset.value) ? refs.modeToggle.dataset.value : 'easy',
+        autoMove: (refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')) ? true : false
+      };
+      localStorage.setItem('fastfacts_filters', JSON.stringify(obj));
+    }catch(err){
+      // ignore storage errors
+      console.warn('Could not save filters', err);
+    }
+  }
+
+  /**
+   * Load saved filter settings from localStorage and apply to controls.
+   */
+  function loadFiltersFromStorage(){
+    try{
+      const raw = localStorage.getItem('fastfacts_filters');
+      if(!raw) return;
+      const obj = JSON.parse(raw || '{}');
+      // category
+      if(obj.category){
+        if(refs.categorySelect){
+          const opt = Array.from(refs.categorySelect.options).find(o=>o.value===obj.category);
+          if(opt) refs.categorySelect.value = obj.category;
+        }
+        if(refs.categoryToggle){
+          const val = (obj.category === '__random__' || state.categories.includes(obj.category)) ? obj.category : '__random__';
+          refs.categoryToggle.dataset.value = val;
+          refs.categoryToggle.textContent = (val === '__random__') ? 'Random Category ▾' : (val + ' ▾');
+          if(refs.categoryList){
+            Array.from(refs.categoryList.children).forEach(li=> li.classList.toggle('selected', li.dataset.value === val));
+          }
+        }
+      }
+      // timer
+      if(obj.timer){
+        if(refs.timerSelect){ refs.timerSelect.value = obj.timer; }
+        if(refs.timerToggle){ refs.timerToggle.dataset.value = obj.timer; refs.timerToggle.textContent = `${obj.timer}s ▾`; }
+        if(refs.timerList){ Array.from(refs.timerList.children).forEach(li=> li.classList.toggle('selected', li.dataset.value === String(obj.timer))); }
+      }
+      // mode
+      if(obj.mode){
+        if(refs.modeSelect){ refs.modeSelect.value = obj.mode; }
+        if(refs.modeToggle){ refs.modeToggle.dataset.value = obj.mode; refs.modeToggle.textContent = `Mode: ${obj.mode.charAt(0).toUpperCase()+obj.mode.slice(1)} ▾`; }
+        if(refs.modeList){ Array.from(refs.modeList.children).forEach(li=> li.classList.toggle('selected', li.dataset.value === obj.mode)); }
+      }
+      // autoMove
+      if(typeof obj.autoMove !== 'undefined' && refs.autoToggle){
+        const on = !!obj.autoMove;
+        refs.autoToggle.dataset.value = on ? 'true' : 'false';
+        refs.autoToggle.setAttribute('aria-pressed', String(on));
+        refs.autoToggle.textContent = on ? 'Auto Move: On' : 'Auto Move: Off';
+      }
+    }catch(err){ console.warn('Could not load filters', err); }
+  }
+
 // ----------------------------- Data loading -----------------------------
 /**
  * Load the local data.json and build a categories list.
@@ -141,6 +206,10 @@ async function loadData(){
     populateCategorySelect();
     // populate timer/mode controls (if present)
     populateControls();
+    // apply persisted filters (if any) before starting
+    loadFiltersFromStorage();
+    // start the first round immediately after data loads
+    if(state.categories && state.categories.length>0) nextRound();
   }catch(err){
     console.error(err);
     refs.feedback.textContent = 'Failed to load data.json — see console for details.';
@@ -310,6 +379,16 @@ function revealAnswer(reason){
   const others = state.current.validList.filter(w => w !== canonical).slice(0,3);
   const display = [canonical].concat(others).join(' — ');
   showExample(display || '—');
+  // transform hint -> Next Round so the user can advance after revealing
+  transformButtonsToNext();
+  if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
+    clearNextTimeout();
+    state.current.nextTimeout = setTimeout(()=>{
+      state.current.nextTimeout = null;
+      restoreActionButtons();
+      nextRound();
+    }, 2000);
+  }
 }
 
 /**
@@ -339,37 +418,54 @@ function handleTimeout(){
   stopTimer();
   // disable typing
   refs.answerInput.disabled = true;
-  // hide the hint/reveal buttons
-  if(refs.hintBtn) refs.hintBtn.style.display = 'none';
+  // transform hint -> Next Round and hide reveal
+  if(refs.hintBtn) {
+    refs.hintBtn.dataset.mode = 'next';
+    refs.hintBtn.textContent = 'Next Round';
+    refs.hintBtn.disabled = false;
+    refs.hintBtn.classList.add('next-mode');
+  }
   if(refs.revealBtn) refs.revealBtn.style.display = 'none';
-
-  // create or show a Next Round button in the actions area
-  let nextBtn = document.getElementById('nextRoundBtn');
-  const actionsContainer = (refs.hintBtn && refs.hintBtn.closest) ? refs.hintBtn.closest('.actions') : document.querySelector('.actions');
-  if(!actionsContainer) return;
-
-  if(!nextBtn){
-    nextBtn = document.createElement('button');
-    nextBtn.id = 'nextRoundBtn';
-    nextBtn.textContent = 'Next Round';
-    // match action button styles by leaving class empty; CSS targets .actions button
-    actionsContainer.appendChild(nextBtn);
-    nextBtn.addEventListener('click', ()=>{
-      // restore normal buttons and start a new round
+  // if auto-move enabled, schedule automatic next round
+  if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
+    clearNextTimeout();
+    state.current.nextTimeout = setTimeout(()=>{
+      state.current.nextTimeout = null;
       restoreActionButtons();
       nextRound();
-    });
-  }else{
-    nextBtn.style.display = 'inline-block';
+    }, 2000);
   }
+}
+
+/**
+ * Ensure a visible Next Round button exists in the actions area and wire its click.
+ * Used after correct answers or timeout; does NOT auto-start a round.
+ */
+function transformButtonsToNext(){
+  if(refs.hintBtn){
+    refs.hintBtn.dataset.mode = 'next';
+    refs.hintBtn.textContent = 'Next Round';
+    refs.hintBtn.disabled = false;
+    refs.hintBtn.classList.add('next-mode');
+  }
+  if(refs.revealBtn) refs.revealBtn.style.display = 'none';
+}
+
+function revertButtonsFromNext(){
+  if(!refs.hintBtn) return;
+  delete refs.hintBtn.dataset.mode;
+  refs.hintBtn.textContent = 'Hint';
+  refs.hintBtn.classList.remove('next-mode');
+  if(refs.revealBtn) refs.revealBtn.style.display = 'inline-block';
+  refs.hintBtn.disabled = (state.current.hintCap<=0);
 }
 
 /**
  * Restore the Hint/Reveal buttons (remove Next Round button if present).
  */
 function restoreActionButtons(){
-  const nextBtn = document.getElementById('nextRoundBtn');
-  if(nextBtn) nextBtn.remove();
+  // revert any Next-mode transforms
+  revertButtonsFromNext();
   if(refs.hintBtn){ refs.hintBtn.style.display = 'inline-block'; refs.hintBtn.disabled = (state.current.hintCap<=0); }
   if(refs.revealBtn){ refs.revealBtn.style.display = 'inline-block'; refs.revealBtn.disabled = false; }
 }
@@ -393,9 +489,8 @@ function submitAnswer(){
     // handle correct match: show feedback, stop round, and schedule next round
     handleCorrectMatch(canonicalMatched, 'Correct');
   }else{
-    // incorrect — give gentle feedback but allow retry
-    refs.feedback.textContent = 'Incorrect — try again';
-    refs.feedback.style.color = 'var(--danger)';
+    // incorrect — silently allow retry (no feedback)
+    clearFeedback();
   }
 }
 
@@ -416,11 +511,17 @@ function handleCorrectMatch(matched, reason){
   refs.hintBtn.disabled = true;
   refs.revealBtn.disabled = true;
 
-  // schedule auto-advance to next round after a short pause
-  state.current.nextTimeout = setTimeout(()=>{
-    state.current.nextTimeout = null;
-    nextRound();
-  }, 1000);
+  // transform the hint button into Next Round and wait for user action
+  transformButtonsToNext();
+  // if auto-move is enabled, schedule a short automatic advance
+  if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
+    clearNextTimeout();
+    state.current.nextTimeout = setTimeout(()=>{
+      state.current.nextTimeout = null;
+      restoreActionButtons();
+      nextRound();
+    }, 2000);
+  }
 }
 
 function clearNextTimeout(){
@@ -436,13 +537,34 @@ function clearFeedback(){
 }
 
 // ----------------------------- Event wiring -----------------------------
-refs.startBtn.addEventListener('click', ()=>{
-  nextRound();
-});
+if(refs.startBtn){
+  refs.startBtn.addEventListener('click', ()=>{
+    nextRound();
+  });
+}
 
 refs.hintBtn.addEventListener('click', ()=>{
+  // If hint button is in 'next' mode, start next round instead of giving a hint
+  if(refs.hintBtn.dataset && refs.hintBtn.dataset.mode === 'next'){
+    // revert buttons then start next
+    restoreActionButtons();
+    nextRound();
+    return;
+  }
   giveHint();
 });
+
+// Auto-move toggle wiring
+if(refs.autoToggle){
+  refs.autoToggle.addEventListener('click', ()=>{
+    const cur = refs.autoToggle.dataset && refs.autoToggle.dataset.value === 'true';
+    const next = !cur;
+    refs.autoToggle.dataset.value = next ? 'true' : 'false';
+    refs.autoToggle.setAttribute('aria-pressed', String(next));
+    refs.autoToggle.textContent = next ? 'Auto Move: On' : 'Auto Move: Off';
+    saveFiltersToStorage();
+  });
+}
 
 refs.revealBtn.addEventListener('click', ()=>{
   revealAnswer('User revealed answer');
@@ -477,13 +599,29 @@ refs.answerInput.addEventListener('input', ()=>{
 
 // keyboard shortcuts: H for hint, R for reveal, N for next
 document.addEventListener('keydown', (e)=>{
-  if(e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')){
-    // don't hijack typing
-    return;
+  const active = document.activeElement;
+  const isTypingActive = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && !active.disabled;
+  // If the user is actively typing in an enabled field, don't intercept keys (Enter is handled there).
+  if(isTypingActive) return;
+
+  // If the Hint button has been transformed into Next Round, allow Enter to trigger it.
+  if(e.key === 'Enter'){
+    if(refs.hintBtn && refs.hintBtn.dataset && refs.hintBtn.dataset.mode === 'next'){
+      refs.hintBtn.click();
+      e.preventDefault();
+      return;
+    }
   }
-  if(e.key.toLowerCase() === 'h') refs.hintBtn.click();
-  if(e.key.toLowerCase() === 'r') refs.revealBtn.click();
-  if(e.key.toLowerCase() === 'n') refs.startBtn.click();
+
+  if(e.key.toLowerCase() === 'h') {
+    if(refs.hintBtn) refs.hintBtn.click();
+  }
+  if(e.key.toLowerCase() === 'r') {
+    if(refs.revealBtn) refs.revealBtn.click();
+  }
+  if(e.key.toLowerCase() === 'n') {
+    if(refs.startBtn) refs.startBtn.click();
+  }
 });
 
 // Theme toggle wiring: toggle light mode class on body and update icon
@@ -520,6 +658,9 @@ if(refs.categoryToggle && refs.categoryMenu && refs.categoryList){
     refs.categoryMenu.setAttribute('aria-hidden', 'true');
     refs.categoryMenu.style.display = 'none';
     refs.categoryToggle.setAttribute('aria-expanded', 'false');
+    // persist and start a new round when the category filter is changed
+    saveFiltersToStorage();
+    nextRound();
   });
 
   // close on outside click
@@ -559,6 +700,9 @@ if(refs.timerToggle && refs.timerMenu && refs.timerList){
     refs.timerToggle.dataset.value = val;
     refs.timerToggle.textContent = `${val}s ▾`;
     refs.timerMenu.setAttribute('aria-hidden','true'); refs.timerMenu.style.display='none'; refs.timerToggle.setAttribute('aria-expanded','false');
+    // persist and start a new round when timer filter is changed
+    saveFiltersToStorage();
+    nextRound();
   });
 }
 
@@ -578,7 +722,21 @@ if(refs.modeToggle && refs.modeMenu && refs.modeList){
     refs.modeToggle.dataset.value = val;
     refs.modeToggle.textContent = `Mode: ${li.textContent} ▾`;
     refs.modeMenu.setAttribute('aria-hidden','true'); refs.modeMenu.style.display='none'; refs.modeToggle.setAttribute('aria-expanded','false');
+    // persist and start a new round when mode filter is changed
+    saveFiltersToStorage();
+    nextRound();
   });
+}
+
+// Native select fallbacks: start next round when a native select changes
+if(refs.categorySelect){
+  refs.categorySelect.addEventListener('change', ()=>{ saveFiltersToStorage(); nextRound(); });
+}
+if(refs.timerSelect){
+  refs.timerSelect.addEventListener('change', ()=>{ saveFiltersToStorage(); nextRound(); });
+}
+if(refs.modeSelect){
+  refs.modeSelect.addEventListener('change', ()=>{ saveFiltersToStorage(); nextRound(); });
 }
 
 // initial load
