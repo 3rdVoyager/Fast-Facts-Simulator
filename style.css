@@ -187,3 +187,8 @@ body.light-mode .answer-input:focus{
 .left .actions button{align-self:stretch}
 .left .actions button{margin-left:8px}
 .left .actions button:first-child{margin-left:0}
+
+/* Start button below actions: full width, larger, primary */
+.start-row{margin-top:12px}
+.start-row .start-button{width:100%;display:block;padding:18px 20px;font-size:20px;border-radius:16px;border:none;background:var(--control-bg);color:var(--control-text);font-weight:900;box-shadow:0 14px 30px rgba(17,68,70,0.16);cursor:pointer;transition:background 180ms ease,box-shadow 200ms ease}
+.start-row .start-button:hover{background:var(--control-bg-hover)}
