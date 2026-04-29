@@ -27,6 +27,30 @@ function normalize(s){
     .replace(/\s+/g, ' ') // collapse whitespace
     .trim();
 }
+// Helper: read the current mode from native select or custom toggle
+function getCurrentMode(){
+  return (refs.modeSelect && refs.modeSelect.value) ? refs.modeSelect.value : (refs.modeToggle && refs.modeToggle.dataset && refs.modeToggle.dataset.value) ? refs.modeToggle.dataset.value : 'easy';
+}
+
+// Helper: update the Hint button label and disabled state depending on mode and hintCap
+function updateHintButtonUI(){
+  if(!refs.hintBtn) return;
+  const mode = getCurrentMode();
+  if(mode === 'hard'){
+    refs.hintBtn.textContent = 'Hint (Disabled in Hard Mode)';
+    refs.hintBtn.disabled = true;
+    return;
+  }
+  if(mode === 'tournament'){
+    refs.hintBtn.textContent = 'Hint (Disabled in Tournament Mode)';
+    refs.hintBtn.disabled = true;
+    return;
+  }
+  // not hard: display normal hint state
+  refs.hintBtn.disabled = (state.current.hintCap<=0);
+  refs.hintBtn.textContent = 'Hint';
+}
+
 
 /**
  * Pick a random element from an array
@@ -157,6 +181,7 @@ const refs = {
   totalCorrect: document.getElementById('totalCorrect'),
   roundCount: document.getElementById('roundCount'),
   resetScoreBtn: document.getElementById('resetScoreBtn'),
+  scoreboardToggle: document.getElementById('scoreboardToggle'),
   toastContainer: document.getElementById('toastContainer'),
   readinessItem: document.getElementById('readinessItem'),
   readinessScore: document.getElementById('readinessScore'),
@@ -164,6 +189,7 @@ const refs = {
   instructionsModal: document.getElementById('instructionsModal'),
   instructionsCloseBtn: document.getElementById('instructionsCloseBtn'),
   instructionsDoneBtn: document.getElementById('instructionsDoneBtn')
+  ,modeBanner: document.getElementById('modeBanner')
 };
 
 // Theme toggle element (added to header)
@@ -195,7 +221,7 @@ function populateControls(){
   }
 
   // modes
-  const modes = [{v:'easy',label:'Easy'},{v:'medium',label:'Medium'},{v:'hard',label:'Hard'}];
+  const modes = [{v:'easy',label:'Easy'},{v:'medium',label:'Medium'},{v:'hard',label:'Hard'},{v:'tournament',label:'Tournament'}];
   if(refs.modeList){
     refs.modeList.innerHTML = '';
     modes.forEach((m, idx)=>{
@@ -218,7 +244,8 @@ function populateControls(){
         category: (refs.categorySelect && refs.categorySelect.value) ? refs.categorySelect.value : (refs.categoryToggle && refs.categoryToggle.dataset.value) ? refs.categoryToggle.dataset.value : '__random__',
         timer: (refs.timerSelect && refs.timerSelect.value) ? refs.timerSelect.value : (refs.timerToggle && refs.timerToggle.dataset.value) ? refs.timerToggle.dataset.value : '30',
         mode: (refs.modeSelect && refs.modeSelect.value) ? refs.modeSelect.value : (refs.modeToggle && refs.modeToggle.dataset.value) ? refs.modeToggle.dataset.value : 'easy',
-        autoMove: (refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')) ? true : false
+            autoMove: (refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')) ? true : false,
+            showScoreboard: (refs.scoreboardToggle && (refs.scoreboardToggle.dataset.value === 'true' || refs.scoreboardToggle.getAttribute('aria-pressed') === 'true')) ? true : false
       };
       localStorage.setItem('fastfacts_filters', JSON.stringify(obj));
     }catch(err){
@@ -269,6 +296,20 @@ function populateControls(){
         refs.autoToggle.setAttribute('aria-pressed', String(on));
         refs.autoToggle.textContent = on ? 'Auto Move: On' : 'Auto Move: Off';
       }
+      // showScoreboard
+      if(typeof obj.showScoreboard !== 'undefined' && refs.scoreboardToggle){
+        const on = !!obj.showScoreboard;
+        refs.scoreboardToggle.dataset.value = on ? 'true' : 'false';
+        refs.scoreboardToggle.setAttribute('aria-pressed', String(on));
+        refs.scoreboardToggle.textContent = on ? 'Show Scoreboard: On' : 'Show Scoreboard: Off';
+        applyScoreboardVisibility(on);
+      } else {
+        // default: show scoreboard
+        applyScoreboardVisibility(true);
+      }
+        // apply any mode effects that should run after loading persisted filters
+        const loadedMode = (refs.modeSelect && refs.modeSelect.value) ? refs.modeSelect.value : (refs.modeToggle && refs.modeToggle.dataset && refs.modeToggle.dataset.value) ? refs.modeToggle.dataset.value : 'easy';
+        applyModeEffects(loadedMode);
     }catch(err){ console.warn('Could not load filters', err); }
   }
 
@@ -339,20 +380,15 @@ function updateScoreUI(){
   refs.bestStreak.textContent = state.score.bestStreak || 0;
   refs.totalCorrect.textContent = state.score.totalCorrect || 0;
   refs.roundCount.textContent = state.score.rounds || 0;
-  // readiness only visible in hard mode
-  const mode = (refs.modeSelect && refs.modeSelect.value) ? refs.modeSelect.value : (refs.modeToggle && refs.modeToggle.dataset.value) ? refs.modeToggle.dataset.value : 'easy';
-  if(mode === 'hard'){
-    if(refs.readinessItem) refs.readinessItem.style.display = '';
-    const r = computeReadiness();
-    if(refs.readinessScore) refs.readinessScore.textContent = r;
-    if(refs.readinessItem){
-      refs.readinessItem.classList.remove('readiness-low','readiness-mid','readiness-high');
-      if(r < 40) refs.readinessItem.classList.add('readiness-low');
-      else if(r < 70) refs.readinessItem.classList.add('readiness-mid');
-      else refs.readinessItem.classList.add('readiness-high');
-    }
-  }else{
-    if(refs.readinessItem) refs.readinessItem.style.display = 'none';
+  // Readiness metric visible in all modes (most accurate in Tournament/Hard)
+  if(refs.readinessItem) refs.readinessItem.style.display = '';
+  const r = computeReadiness();
+  if(refs.readinessScore) refs.readinessScore.textContent = r;
+  if(refs.readinessItem){
+    refs.readinessItem.classList.remove('readiness-low','readiness-mid','readiness-high');
+    if(r < 40) refs.readinessItem.classList.add('readiness-low');
+    else if(r < 70) refs.readinessItem.classList.add('readiness-mid');
+    else refs.readinessItem.classList.add('readiness-high');
   }
 }
 
@@ -513,8 +549,8 @@ function nextRound(){
   // reset UI elements
   refs.answerInput.value = '';
   refs.answerInput.disabled = false;
-  refs.hintBtn.disabled = (state.current.hintCap<=0);
-  refs.hintBtn.textContent = 'Hint';
+  // set hint UI depending on mode and hint cap
+  updateHintButtonUI();
   refs.revealBtn.disabled = false;
   hideExample();
 
@@ -655,7 +691,8 @@ function transformButtonsToNext(){
 function revertButtonsFromNext(){
   if(!refs.hintBtn) return;
   delete refs.hintBtn.dataset.mode;
-  refs.hintBtn.textContent = 'Hint';
+  // update text to reflect current mode (hard mode disables hints)
+  updateHintButtonUI();
   refs.hintBtn.classList.remove('next-mode');
   if(refs.revealBtn) refs.revealBtn.style.display = 'inline-block';
   refs.hintBtn.disabled = (state.current.hintCap<=0);
@@ -807,6 +844,19 @@ if(refs.autoToggle){
     refs.autoToggle.dataset.value = next ? 'true' : 'false';
     refs.autoToggle.setAttribute('aria-pressed', String(next));
     refs.autoToggle.textContent = next ? 'Auto Move: On' : 'Auto Move: Off';
+    saveFiltersToStorage();
+  });
+}
+
+// Scoreboard visibility toggle wiring
+if(refs.scoreboardToggle){
+  refs.scoreboardToggle.addEventListener('click', ()=>{
+    const cur = refs.scoreboardToggle.dataset && refs.scoreboardToggle.dataset.value === 'true';
+    const next = !cur;
+    refs.scoreboardToggle.dataset.value = next ? 'true' : 'false';
+    refs.scoreboardToggle.setAttribute('aria-pressed', String(next));
+    refs.scoreboardToggle.textContent = next ? 'Show Scoreboard: On' : 'Show Scoreboard: Off';
+    applyScoreboardVisibility(next);
     saveFiltersToStorage();
   });
 }
@@ -1007,6 +1057,8 @@ if(refs.modeToggle && refs.modeMenu && refs.modeList){
     const val = li.dataset.value || 'easy';
     refs.modeToggle.dataset.value = val;
     refs.modeToggle.textContent = `Mode: ${li.textContent} ▾`;
+    // apply any UI effects for this mode (e.g., tournament locks)
+    applyModeEffects(val);
     // persist and start a new round when mode filter is changed
     // When changing modes, reset saved sessions/scores
     saveFiltersToStorage();
@@ -1015,11 +1067,13 @@ if(refs.modeToggle && refs.modeMenu && refs.modeList){
     nextRound();
   });
 } else if(refs.modeToggle && !refs.modeList){
-  // cycling button inside Settings
-  const _modes = ['easy','medium','hard'];
+  // cycling button inside Settings (includes Tournament)
+  const _modes = ['easy','medium','hard','tournament'];
   const setModeUI = (m)=>{
     refs.modeToggle.dataset.value = m;
     refs.modeToggle.textContent = `Mode: ${m.charAt(0).toUpperCase()+m.slice(1)}`;
+    // apply UI effects that depend on mode
+    applyModeEffects(m);
   };
   // ensure a default
   if(!refs.modeToggle.dataset || !refs.modeToggle.dataset.value) setModeUI('easy');
@@ -1034,6 +1088,50 @@ if(refs.modeToggle && refs.modeMenu && refs.modeList){
     showToast(`Switched mode to ${next.charAt(0).toUpperCase()+next.slice(1)}; scores reset`);
     nextRound();
   });
+}
+
+// Apply UI and control effects for a given mode
+function applyModeEffects(mode){
+  // Tournament mode disables filters/toggles except theme and reset
+  const isTournament = mode === 'tournament';
+  // Category
+  if(refs.categoryToggle){
+    refs.categoryToggle.disabled = isTournament;
+    refs.categoryToggle.classList.toggle('disabled', isTournament);
+    if(isTournament){ refs.categoryToggle.dataset.value = '__random__'; refs.categoryToggle.textContent = 'Category: Random ▾';
+      if(refs.categoryList) Array.from(refs.categoryList.children).forEach(li=> li.classList.toggle('selected', li.dataset.value === '__random__'));
+    }
+  }
+  // Timer
+  if(refs.timerToggle){
+    refs.timerToggle.disabled = isTournament;
+    refs.timerToggle.classList.toggle('disabled', isTournament);
+    if(isTournament){ refs.timerToggle.dataset.value = '20'; refs.timerToggle.textContent = 'Timer: 20s ▾';
+      if(refs.timerList) Array.from(refs.timerList.children).forEach(li=> li.classList.toggle('selected', li.dataset.value === '20'));
+    }
+  }
+  // Auto-move: force on in tournament but disable toggle so user can't change
+  if(refs.autoToggle){
+    if(isTournament){ refs.autoToggle.dataset.value = 'true'; refs.autoToggle.setAttribute('aria-pressed','true'); refs.autoToggle.textContent = 'Auto Move: On'; }
+    refs.autoToggle.disabled = isTournament;
+    refs.autoToggle.classList.toggle('disabled', isTournament);
+  }
+  // Ensure hint button label updates immediately
+  updateHintButtonUI();
+  // show or hide tournament banner
+  if(refs.modeBanner){
+    if(isTournament){ refs.modeBanner.textContent = 'Tournament mode — filters locked'; refs.modeBanner.classList.add('show'); }
+    else { refs.modeBanner.classList.remove('show'); }
+  }
+  // Persist the forced changes
+  saveFiltersToStorage();
+}
+
+// Show or hide the scoreboard panel
+function applyScoreboardVisibility(show){
+  if(!refs.scorePanel) return;
+  if(show){ refs.scorePanel.style.display = ''; refs.scorePanel.setAttribute('aria-hidden','false'); }
+  else { refs.scorePanel.style.display = 'none'; refs.scorePanel.setAttribute('aria-hidden','true'); }
 }
 
 // Native select fallbacks: start next round when a native select changes

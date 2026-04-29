@@ -55,13 +55,16 @@
                 <div class="settings-item"><button id="modeToggle" class="dropdown-toggle" aria-pressed="false">Mode: Easy</button></div>
                 <div class="settings-item"><button id="autoToggle" class="dropdown-toggle" aria-pressed="false">Auto Move: Off</button></div>
                 <div class="settings-item"><button id="resetScoreBtn" class="dropdown-toggle">Reset Scores</button></div>
-                <div class="settings-item"><button id="themeToggle" class="dropdown-toggle" aria-label="Toggle dark/light theme">Dark Mode 🌙</button></div>
+                <div class="settings-item"><button id="scoreboardToggle" class="dropdown-toggle" aria-pressed="true">Show Scoreboard: On</button></div>
+                <div class="settings-item"><button id="themeToggle" class="dropdown-toggle" aria-label="Toggle dark/light theme">Dark Mode🌙</button></div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </header>
+
+  <div id="modeBanner" class="mode-banner" aria-live="polite" role="status"></div>
 
     <main class="main">
       <section class="left">
@@ -74,7 +77,7 @@
           <div class="score-item"><strong>Best:</strong> <span id="bestStreak">0</span></div>
           <div class="score-item"><strong>Correct:</strong> <span id="totalCorrect">0</span></div>
           <div class="score-item"><strong>Rounds:</strong> <span id="roundCount">0</span></div>
-          <div class="score-item readiness-item" id="readinessItem" style="display:none" role="status" aria-live="polite"><strong>Tournament Readiness:</strong>
+          <div class="score-item readiness-item" id="readinessItem" role="status" aria-live="polite"><strong>Tournament Readiness:</strong>
             <span id="readinessScore" class="readiness-score">0</span>
           </div>
         </div>
@@ -129,13 +132,13 @@
       <p class="muted-note">Updated: includes Settings, Mode cycling, Timer Off, Auto Move, and Tournament Readiness.</p>
       <ol class="instructions-list">
         <li><strong>Choose filters:</strong> open <em>Category</em> to pick topics; settings live in <strong>Settings ▾</strong> (gear).</li>
-        <li><strong>Mode:</strong> in Settings the <strong>Mode</strong> button cycles Easy → Medium → Hard. Switching modes resets saved scores.</li>
+        <li><strong>Mode:</strong> in Settings the <strong>Mode</strong> button cycles Easy → Medium → Hard → Tournament. Switching modes resets saved scores. Tournament mode locks filters and enforces competitive settings (random category, 20s timer, Auto Move enabled).</li>
         <li><strong>Timer:</strong> pick a timer or set <em>Timer: Off</em> to disable timing.</li>
         <li><strong>Round flow:</strong> a letter appears on the right and the category on the left. Type answers starting with the letter; correct answers are accepted instantly (live validation).</li>
-        <li><strong>Hints & reveal:</strong> press <em>Hint</em> to reveal progressive prefixes. <em>Give Up</em> reveals canonical answers and example answers.</li>
+        <li><strong>Hints & reveal:</strong> press <em>Hint</em> to reveal progressive prefixes. In <strong>Hard</strong> mode hints are disabled — the Hint button will read <em>Hint (Disabled in Hard Mode)</em>. <em>Give Up</em> reveals canonical answers and example answers.</li>
         <li><strong>Next round:</strong> when a round ends the Hint button becomes <em>Next Round</em> (you can also press Enter to advance).</li>
         <li><strong>Auto Move:</strong> enable Auto Move in Settings to automatically advance after the short countdown when a round ends.</li>
-        <li><strong>Scoring & readiness:</strong> streaks and best scores are shown in the score panel. Tournament Readiness is visible only in Hard mode and is computed from recent performance.</li>
+        <li><strong>Scoring & readiness:</strong> streaks and best scores are shown in the score panel. Tournament Readiness is visible in all modes but is most meaningful in Tournament/Hard modes. Some scoring features (for example, readiness calculation and tournament-style penalties/bonuses) are active only in <strong>Hard</strong> and <strong>Tournament</strong> modes to mirror competitive scoring.</li>
         <li><strong>Persistence:</strong> filters and scores persist to localStorage; Reset Scores clears saved data.</li>
       </ol>
       <p class="tip">Tip: Use the Settings menu to toggle Dark/Light theme, Auto Move, or reset scores. The header's gear is the single place for those options.</p>

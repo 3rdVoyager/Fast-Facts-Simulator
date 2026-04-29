@@ -126,7 +126,6 @@ body.light-mode{
   color:var(--control-text);
   transform:translateY(-1px);
 }
-.dropdown-list li.selected::before{ /* selected marker handled in ::before */ }
 .dropdown-list li.selected::before{content:'';position:absolute;left:18px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 4px rgba(47,143,152,0.08)}
 .dropdown-list::-webkit-scrollbar{width:12px}
 .dropdown-list::-webkit-scrollbar-thumb{background:rgba(17,68,70,0.12);border-radius:8px}
@@ -147,6 +146,16 @@ body.light-mode{
 
 /* Slightly reduce the menu padding for the smaller settings menu to keep density */
 #settingsDropdown .dropdown-menu{padding:10px}
+.dropdown-toggle[disabled], .dropdown-toggle.disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+  pointer-events:none;
+  filter:grayscale(0.02);
+}
+
+/* Tournament mode banner */
+.mode-banner{display:none;margin:12px 36px;padding:12px 16px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(0,0,0,0.04));border-left:4px solid var(--accent);border-radius:8px;color:var(--text-color);font-weight:800}
+.mode-banner.show{display:block}
 .left,.right{flex:1;background:var(--panel-start);padding:20px;border-radius:18px;border:1px solid rgba(17,68,70,0.04);min-height:calc(100vh - 320px);display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(15,55,56,0.04);position:relative}
 .controls button:hover{background:rgba(17,98,176,0.12)}
 .pill{display:block}
