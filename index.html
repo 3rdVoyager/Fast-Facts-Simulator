@@ -52,6 +52,9 @@
             <div class="control-inline">
               <button id="instructionsBtn" class="dropdown-toggle" aria-haspopup="dialog" aria-controls="instructionsModal">Instructions</button>
             </div>
+            <div class="control-inline">
+              <button id="resetScoreBtn" class="dropdown-toggle">Reset Scores</button>
+            </div>
             <!-- startBtn moved to the left panel under Hint/Reveal -->
           </div>
         </div>
@@ -65,6 +68,18 @@
         <h2 class="label">Category</h2>
         <div id="categoryDisplay" class="pill">—</div>
         <div id="categoryDescription" class="category-desc">&nbsp;</div>
+
+        <div id="scorePanel" class="score-panel" aria-live="polite">
+          <div class="score-item"><strong>Streak:</strong> <span id="currentStreak">0</span></div>
+          <div class="score-item"><strong>Best:</strong> <span id="bestStreak">0</span></div>
+          <div class="score-item"><strong>Correct:</strong> <span id="totalCorrect">0</span></div>
+          <div class="score-item"><strong>Rounds:</strong> <span id="roundCount">0</span></div>
+          <div class="score-item readiness-item" id="readinessItem" style="display:none" role="status" aria-live="polite"><strong>Tournament Readiness:</strong>
+            <span id="readinessScore" class="readiness-score">0</span>
+          </div>
+        </div>
+
+        <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
 
         <div class="timer-row">
           <div id="timeText">Time Remaining: —</div>

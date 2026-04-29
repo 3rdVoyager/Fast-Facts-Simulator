@@ -148,6 +148,16 @@ const refs = {
   exampleAnswer: document.getElementById('exampleAnswer'),
   exampleArea: document.getElementById('exampleArea')
   ,
+  // score panel elements
+  scorePanel: document.getElementById('scorePanel'),
+  currentStreak: document.getElementById('currentStreak'),
+  bestStreak: document.getElementById('bestStreak'),
+  totalCorrect: document.getElementById('totalCorrect'),
+  roundCount: document.getElementById('roundCount'),
+  resetScoreBtn: document.getElementById('resetScoreBtn'),
+  toastContainer: document.getElementById('toastContainer'),
+  readinessItem: document.getElementById('readinessItem'),
+  readinessScore: document.getElementById('readinessScore'),
   instructionsBtn: document.getElementById('instructionsBtn'),
   instructionsModal: document.getElementById('instructionsModal'),
   instructionsCloseBtn: document.getElementById('instructionsCloseBtn'),
@@ -286,6 +296,9 @@ async function loadData(){
     window.CATEGORY_DESCRIPTIONS = rawData.CategoryDescriptions || {};
     // apply persisted filters (if any) before starting
     loadFiltersFromStorage();
+    // load persisted score/streak state
+    loadScoreFromStorage();
+    updateScoreUI();
     // ensure the example area is visible by default (content will be empty during rounds)
     if(refs.exampleArea && refs.exampleArea.classList){ refs.exampleArea.classList.remove('hidden'); }
     // start the first round immediately after data loads
@@ -304,6 +317,108 @@ function updateCategoryDescription(category){
   if(!refs.categoryDescription) return;
   const desc = (window.CATEGORY_DESCRIPTIONS && window.CATEGORY_DESCRIPTIONS[category]) || '';
   refs.categoryDescription.textContent = desc || 'Try to think of common things in this area; type them to answer.';
+}
+
+// ----------------------------- Score / Streaks -----------------------------
+// persisted under `fastfacts_score` in localStorage
+function defaultScore(){ return { currentStreak:0, bestStreak:0, totalCorrect:0, rounds:0 }; }
+function loadScoreFromStorage(){
+  try{
+    const raw = localStorage.getItem('fastfacts_score');
+    state.score = raw ? JSON.parse(raw) : defaultScore();
+  }catch(e){ state.score = defaultScore(); }
+}
+function saveScoreToStorage(){
+  try{ localStorage.setItem('fastfacts_score', JSON.stringify(state.score)); }catch(e){}
+}
+function updateScoreUI(){
+  if(!refs.scorePanel) return;
+  refs.currentStreak.textContent = state.score.currentStreak || 0;
+  refs.bestStreak.textContent = state.score.bestStreak || 0;
+  refs.totalCorrect.textContent = state.score.totalCorrect || 0;
+  refs.roundCount.textContent = state.score.rounds || 0;
+  // readiness only visible in hard mode
+  const mode = (refs.modeSelect && refs.modeSelect.value) ? refs.modeSelect.value : (refs.modeToggle && refs.modeToggle.dataset.value) ? refs.modeToggle.dataset.value : 'easy';
+  if(mode === 'hard'){
+    if(refs.readinessItem) refs.readinessItem.style.display = '';
+    const r = computeReadiness();
+    if(refs.readinessScore) refs.readinessScore.textContent = r;
+    if(refs.readinessItem){
+      refs.readinessItem.classList.remove('readiness-low','readiness-mid','readiness-high');
+      if(r < 40) refs.readinessItem.classList.add('readiness-low');
+      else if(r < 70) refs.readinessItem.classList.add('readiness-mid');
+      else refs.readinessItem.classList.add('readiness-high');
+    }
+  }else{
+    if(refs.readinessItem) refs.readinessItem.style.display = 'none';
+  }
+}
+
+function finalizeRound(result){
+  // result: 'correct' or 'revealed' (or other)
+  state.score.rounds = (state.score.rounds || 0) + 1;
+  const prevStreak = state.score.currentStreak || 0;
+  const prevBest = state.score.bestStreak || 0;
+  if(result === 'correct'){
+    state.score.totalCorrect = (state.score.totalCorrect || 0) + 1;
+    state.score.currentStreak = prevStreak + 1;
+    if(prevBest < state.score.currentStreak){
+      state.score.bestStreak = state.score.currentStreak;
+      // show toast for new best
+      showToast(`New best streak: ${state.score.bestStreak}`,'success');
+    }else{
+      // show toast for streak increase
+      if(state.score.currentStreak > prevStreak) showToast(`Streak: ${state.score.currentStreak}`,'success');
+    }
+  }else{
+    // non-correct round resets streak
+    if(prevStreak > 0) showToast(`Streak ended at ${prevStreak}`);
+    state.score.currentStreak = 0;
+  }
+  saveScoreToStorage();
+  updateScoreUI();
+}
+
+/**
+ * Compute a simple readiness score [1..100] from stored metrics.
+ * Formula (simple heuristic):
+ * - accuracy = totalCorrect / rounds (0..1)
+ * - streakFactor = min(bestStreak,10)/10 (0..1)
+ * readiness = clamp(round((0.75*accuracy + 0.25*streakFactor)*100), 1, 100)
+ */
+function computeReadiness(){
+  const s = state.score || {};
+  const rounds = s.rounds || 0;
+  const accuracy = rounds > 0 ? ((s.totalCorrect || 0)/rounds) : 0;
+  const streakFactor = Math.min((s.bestStreak || 0),10)/10;
+  let val = Math.round((0.75*accuracy + 0.25*streakFactor)*100);
+  // when there have been no rounds yet, readiness is 0
+  if(rounds === 0) val = 0;
+  if(val < 0) val = 0;
+  if(val > 100) val = 100;
+  return val;
+}
+
+function resetScore(){
+  state.score = defaultScore();
+  saveScoreToStorage();
+  updateScoreUI();
+  showToast('Score reset');
+}
+
+function showToast(text, type){
+  if(!refs.toastContainer) return;
+  const div = document.createElement('div');
+  div.className = 'toast' + (type ? ' '+type : '');
+  div.textContent = text;
+  refs.toastContainer.appendChild(div);
+  // allow CSS transition
+  requestAnimationFrame(()=>{ div.classList.add('show'); });
+  // remove after 3s
+  setTimeout(()=>{
+    div.classList.remove('show');
+    setTimeout(()=>{ try{ refs.toastContainer.removeChild(div); }catch(e){} }, 240);
+  }, 3000);
 }
 
 /**
@@ -486,6 +601,8 @@ function revealAnswer(reason){
   const others = state.current.validList.filter(w => w !== canonical).slice(0,3);
   const display = [canonical].concat(others).join(' — ');
   showExample(display || '—');
+  // finalize scoring for revealed/give-up/timeout rounds
+  try{ finalizeRound('revealed'); }catch(e){}
   // transform hint -> Next Round so the user can advance after revealing
   transformButtonsToNext();
   if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
@@ -604,6 +721,8 @@ function handleCorrectMatch(matched, reason){
 
   // transform the hint button into Next Round and wait for user action
   transformButtonsToNext();
+  // finalize scoring for this round
+  try{ finalizeRound('correct'); }catch(e){}
   // if auto-move is enabled, schedule a short automatic advance with countdown
   if(refs.autoToggle && (refs.autoToggle.dataset.value === 'true' || refs.autoToggle.getAttribute('aria-pressed') === 'true')){
     startAutoCountdown(AUTO_MOVE_DELAY_MS);
@@ -691,6 +810,14 @@ if(refs.autoToggle){
   });
 }
 
+// Reset score button wiring
+if(refs.resetScoreBtn){
+  refs.resetScoreBtn.addEventListener('click', ()=>{
+    if(!confirm('Reset saved scores and streaks?')) return;
+    resetScore();
+  });
+}
+
 // Instructions modal wiring
 if(refs.instructionsBtn && refs.instructionsModal){
   const openInstructions = ()=>{
@@ -733,6 +860,18 @@ refs.answerInput.addEventListener('keydown', (e)=>{
     }
     submitAnswer();
   }
+});
+
+// Support pressing Enter to advance when the input is disabled (Next Round state).
+// Disabled inputs do not receive key events, so listen on the document and
+// only act when the hint button is in 'next' mode.
+document.addEventListener('keydown', (e) => {
+  if(e.key !== 'Enter') return;
+  if(!(refs.hintBtn && refs.hintBtn.dataset && refs.hintBtn.dataset.mode === 'next')) return;
+  e.preventDefault();
+  clearNextTimeout();
+  restoreActionButtons();
+  nextRound();
 });
 
 // Live validation: validate as the user types and auto-advance when a match is found.
@@ -854,7 +993,10 @@ if(refs.modeToggle && refs.modeMenu && refs.modeList){
     refs.modeToggle.textContent = `Mode: ${li.textContent} ▾`;
     // keep menu open (do not close on selection)
     // persist and start a new round when mode filter is changed
+    // When changing modes, reset saved sessions/scores
     saveFiltersToStorage();
+    resetScore();
+    showToast(`Switched mode to ${li.textContent}; scores reset`);
     nextRound();
   });
 }
@@ -867,7 +1009,7 @@ if(refs.timerSelect){
   refs.timerSelect.addEventListener('change', ()=>{ saveFiltersToStorage(); nextRound(); });
 }
 if(refs.modeSelect){
-  refs.modeSelect.addEventListener('change', ()=>{ saveFiltersToStorage(); nextRound(); });
+  refs.modeSelect.addEventListener('change', ()=>{ saveFiltersToStorage(); resetScore(); showToast('Mode changed; scores reset'); nextRound(); });
 }
 
 // initial load

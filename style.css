@@ -25,7 +25,7 @@
   --control-bg: #1162b0;
   --control-bg-hover: #0b4f8e;
   --control-text: var(--button-text);
-  --text-color: #d9ffff;
+  --text-color: #ffffff;
   --accent-2: #7fd1ff;
   --example-start: #044a6a; /* example area background blue */
   --example-end: #033a53;
@@ -182,6 +182,46 @@ body.light-mode{
   text-align: center;
   opacity:0.95;
 }
+/* Score panel styles */
+.score-panel{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 12px;
+  margin-top:10px;
+  align-items:center;
+  justify-content:center;
+}
+.score-item{
+  background: rgba(255,255,255,0.03);
+  padding:6px 8px;
+  border-radius:8px;
+  font-weight:600;
+  font-size:0.9rem;
+  color:var(--muted);
+  border: 2px solid transparent; /* reserve outline space so readiness border doesn't change sizing */
+}
+.score-item strong{ font-weight:800; margin-right:6px; color:var(--box-foreground); }
+/* Readiness pill color states */
+/* Readiness: same pill sizing/background as other score items.
+   Only the text color and outline (border) change based on readiness level. */
+.readiness-score{
+  display:inline-block;
+  font-weight:800;
+  font-size:0.9rem;
+  padding:0 6px;
+  color: inherit;
+}
+
+/* Outline & text color (no gradients) */
+.readiness-low{ color:#ff6b6b; border-color: rgba(255,107,107,0.22); }
+.readiness-mid{ color:#ffb84d; border-color: rgba(255,184,77,0.22); }
+.readiness-high{ color:#2ecc71; border-color: rgba(46,204,113,0.22); }
+
+/* Toast notifications */
+#toastContainer{position:fixed;right:20px;bottom:24px;display:flex;flex-direction:column;gap:8px;z-index:2500}
+.toast{background:linear-gradient(180deg,rgba(0,0,0,0.45),rgba(0,0,0,0.28));color:var(--text-color);padding:10px 14px;border-radius:10px;box-shadow:0 12px 32px rgba(2,12,14,0.4);font-weight:800;min-width:180px;opacity:0;transform:translateY(6px) scale(0.98);transition:opacity 220ms ease, transform 220ms ease}
+.toast.show{opacity:1;transform:translateY(0) scale(1)}
+.toast.success{background:linear-gradient(90deg,var(--success),#9ef3b8);color:#03301a}
 /* Filters bar placed directly under the header */
 .filters-bar .controls{max-width:1200px;margin:0;display:flex;gap:12px;align-items:center;justify-content:flex-start;padding-left:36px}
 .controls button{padding:10px 14px;border-radius:18px;border:none;background:var(--control-bg);color:var(--control-text);cursor:pointer;font-weight:800;box-shadow:0 6px 14px rgba(17,68,70,0.05);transition:background 180ms ease,box-shadow 200ms ease}
