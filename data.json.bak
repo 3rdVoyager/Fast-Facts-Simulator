@@ -1,0 +1,688 @@
+{
+  "Fields of Science": {
+    "A": ["Astronomy"],
+    "B": ["Biology", "Botany"],
+    "C": ["Chemistry"],
+    "E": ["Ecology"],
+    "G": ["Geology"],
+    "M": ["Meteorology"],
+    "O": ["Oceanography"],
+    "P": ["Physics"],
+    "Z": ["Zoology"]
+  },
+
+  "Scientific Tools": {
+    "B": ["Balance", "Beaker"],
+    "C": ["Centrifuge", "Compass"],
+    "F": ["Flask", "Funnel"],
+    "G": ["Goggles"],
+    "M": ["Magnet", "Microscope"],
+    "P": ["Pipette"],
+    "R": ["Ruler"],
+    "S": ["Scale"],
+    "T": ["Telescope", "Thermometer"]
+  },
+
+  "Trees": {
+    "A": ["Alder", "Apple", "Ash"],
+    "B": ["Beech", "Birch"],
+    "C": ["Cedar", "Cherry"],
+    "D": ["Dogwood"],
+    "E": ["Elm", "Eucalyptus"],
+    "F": ["Fir"],
+    "M": ["Magnolia", "Maple"],
+    "O": ["Oak", "Olive"],
+    "P": ["Pine", "Poplar"],
+    "R": ["Redwood"],
+    "S": ["Spruce"],
+    "W": ["Willow"]
+  },
+
+  "Flowers": {
+    "A": ["Aster", "Azalea"],
+    "B": ["Begonia", "Buttercup"],
+    "C": ["Carnation", "Clover"],
+    "D": ["Daffodil", "Daisy"],
+    "I": ["Iris"],
+    "L": ["Lilac", "Lily"],
+    "O": ["Orchid"],
+    "P": ["Poppy"],
+    "R": ["Rose"],
+    "S": ["Snapdragon", "Sunflower"],
+    "T": ["Tulip"]
+  },
+
+  "Mammals": {
+    "A": ["Aardvark", "Armadillo"],
+    "B": ["Bat", "Bear"],
+    "C": ["Cat", "Cow"],
+    "D": ["Deer", "Dog"],
+    "E": ["Elephant"],
+    "F": ["Ferret", "Fox"],
+    "G": ["Giraffe", "Gorilla"],
+    "H": ["Hamster", "Horse"],
+    "K": ["Kangaroo", "Koala"],
+    "L": ["Lemur", "Lion"],
+    "M": ["Moose", "Mouse"],
+    "O": ["Otter"],
+    "R": ["Rabbit"],
+    "S": ["Squirrel"]
+  },
+
+  "Insects": {
+    "A": ["Ant", "Aphid"],
+    "B": ["Bee", "Beetle", "Butterfly"],
+    "C": ["Caterpillar", "Cicada", "Cricket"],
+    "D": ["Dragonfly"],
+    "F": ["Firefly", "Flea", "Fly"],
+    "G": ["Gnat", "Grasshopper"],
+    "H": ["Honeybee", "Hornet"],
+    "L": ["Ladybug"],
+    "M": ["Mosquito", "Moth"],
+    "R": ["Roach"],
+    "T": ["Termite"]
+  },
+
+  "Birds": {
+    "A": ["Albatross"],
+    "B": ["Bluebird"],
+    "C": ["Cardinal", "Crow"],
+    "D": ["Dove", "Duck"],
+    "E": ["Eagle", "Egret"],
+    "F": ["Falcon", "Finch"],
+    "G": ["Goose", "Gull"],
+    "H": ["Hawk", "Heron"],
+    "J": ["Jay", "Junco"],
+    "L": ["Lark", "Loon"],
+    "M": ["Mockingbird"],
+    "N": ["Nighthawk"],
+    "O": ["Ostrich", "Owl"],
+    "P": ["Parrot", "Penguin"],
+    "R": ["Raven", "Robin"],
+    "S": ["Sparrow", "Swallow", "Swan"],
+    "T": ["Tern", "Toucan", "Turkey"],
+    "V": ["Vulture"],
+    "W": ["Warbler", "Woodpecker"]
+  },
+
+  "Fish": {
+    "A": ["Anchovy", "Angelfish"],
+    "B": ["Bass", "Bluegill"],
+    "C": ["Carp", "Catfish", "Cod"],
+    "F": ["Flounder"],
+    "G": ["Goldfish", "Guppy"],
+    "H": ["Haddock", "Herring"],
+    "M": ["Marlin", "Mackerel", "Minnow"],
+    "P": ["Perch", "Pike", "Pufferfish"],
+    "S": ["Salmon", "Sardine", "Shark"],
+    "T": ["Trout", "Tuna"]
+  },
+
+  "Amphibians": {
+    "A": ["Axolotl"],
+    "B": ["Bullfrog"],
+    "F": ["Frog"],
+    "M": ["Mudpuppy"],
+    "N": ["Newt"],
+    "S": ["Salamander"],
+    "T": ["Toad"]
+  },
+
+  "Reptiles": {
+    "A": ["Alligator", "Anole"],
+    "B": ["Boa"],
+    "C": ["Cobra", "Crocodile"],
+    "G": ["Gecko"],
+    "I": ["Iguana"],
+    "L": ["Lizard"],
+    "P": ["Python"],
+    "S": ["Skink", "Snake"],
+    "T": ["Tortoise", "Turtle"]
+  },
+
+  "Human Body Parts": {
+    "A": ["Ankle", "Arm"],
+    "B": ["Back", "Belly"],
+    "C": ["Cheek", "Chin"],
+    "E": ["Ear", "Elbow", "Eye"],
+    "F": ["Face", "Finger", "Foot"],
+    "H": ["Hair", "Hand", "Head", "Heel", "Hip"],
+    "J": ["Jaw"],
+    "K": ["Knee", "Knuckle"],
+    "L": ["Leg", "Lip"],
+    "M": ["Mouth"],
+    "N": ["Neck", "Nose"],
+    "S": ["Shoulder", "Skin", "Stomach"],
+    "T": ["Thigh", "Thumb", "Toe", "Tooth"]
+  },
+
+  "Human Organs": {
+    "B": ["Bladder", "Brain"],
+    "E": ["Esophagus", "Eye"],
+    "H": ["Heart"],
+    "I": ["Intestine"],
+    "K": ["Kidney"],
+    "L": ["Liver", "Lung"],
+    "P": ["Pancreas"],
+    "S": ["Skin", "Spleen", "Stomach"]
+  },
+
+  "Human Bones": {
+    "F": ["Femur", "Fibula"],
+    "H": ["Humerus"],
+    "J": ["Jawbone"],
+    "K": ["Kneecap"],
+    "P": ["Patella", "Pelvis"],
+    "R": ["Radius", "Rib"],
+    "S": ["Skull", "Spine", "Sternum"],
+    "T": ["Tibia"],
+    "U": ["Ulna"]
+  },
+
+  "Human Senses": {
+    "H": ["Hearing"],
+    "S": ["Smell"],
+    "T": ["Taste"],
+    "V": ["Vision"]
+  },
+
+  "Part of a Cell": {
+    "C": ["Cell wall", "Chloroplast", "Chromosome", "Cytoplasm"],
+    "D": ["DNA"],
+    "M": ["Membrane", "Mitochondrion"],
+    "N": ["Nucleolus", "Nucleus"],
+    "R": ["Ribosome"],
+    "V": ["Vacuole"]
+  },
+
+  "Viral Diseases": {
+    "C": ["Chickenpox", "Cold", "COVID"],
+    "F": ["Flu"],
+    "M": ["Measles", "Mumps"],
+    "R": ["Rabies"],
+    "S": ["Smallpox"],
+    "W": ["Warts"]
+  },
+
+  "Planets & Moons": {
+    "E": ["Earth", "Europa"],
+    "G": ["Ganymede"],
+    "I": ["Io"],
+    "J": ["Jupiter"],
+    "M": ["Mars", "Mercury", "Moon"],
+    "N": ["Neptune"],
+    "P": ["Pluto"],
+    "S": ["Saturn"],
+    "T": ["Titan"],
+    "U": ["Uranus"],
+    "V": ["Venus"]
+  },
+
+  "Stars & Astronomy": {
+    "A": ["Altair", "Asteroid"],
+    "B": ["Black hole"],
+    "C": ["Comet"],
+    "E": ["Eclipse"],
+    "G": ["Galaxy"],
+    "M": ["Meteor"],
+    "N": ["Nebula"],
+    "O": ["Orbit"],
+    "P": ["Planet", "Polaris"],
+    "S": ["Star", "Sun"]
+  },
+
+  "Constellations": {
+    "A": ["Andromeda", "Aquarius", "Aries"],
+    "C": ["Cygnus"],
+    "D": ["Draco"],
+    "L": ["Leo", "Libra"],
+    "O": ["Orion"],
+    "P": ["Pegasus", "Pisces"],
+    "S": ["Scorpius"],
+    "T": ["Taurus"]
+  },
+
+  "Unmanned Space Missions": {
+    "C": ["Curiosity"],
+    "G": ["Galileo"],
+    "H": ["Hubble"],
+    "J": ["Juno"],
+    "K": ["Kepler"],
+    "N": ["New Horizons"],
+    "P": ["Pioneer"],
+    "V": ["Voyager"]
+  },
+
+  "Manned Space Missions": {
+    "A": ["Apollo"],
+    "G": ["Gemini"],
+    "M": ["Mercury"],
+    "S": ["Shuttle", "Skylab", "Soyuz"]
+  },
+
+  "Landforms": {
+    "C": ["Canyon", "Cliff"],
+    "D": ["Delta", "Dune"],
+    "F": ["Fjord"],
+    "G": ["Glacier"],
+    "H": ["Hill"],
+    "I": ["Island"],
+    "M": ["Mesa", "Mountain"],
+    "P": ["Plain", "Plateau"],
+    "V": ["Valley", "Volcano"]
+  },
+
+  "Oceans & Seas": {
+    "A": ["Arctic", "Atlantic"],
+    "B": ["Baltic", "Black Sea"],
+    "C": ["Caribbean"],
+    "I": ["Indian Ocean"],
+    "M": ["Mediterranean"],
+    "P": ["Pacific"],
+    "R": ["Red Sea"],
+    "S": ["Southern Ocean"]
+  },
+
+  "Natural Disasters": {
+    "A": ["Avalanche"],
+    "D": ["Drought"],
+    "E": ["Earthquake"],
+    "F": ["Flood"],
+    "H": ["Hurricane"],
+    "L": ["Landslide"],
+    "T": ["Tornado", "Tsunami"],
+    "W": ["Wildfire"]
+  },
+
+  "Rocks & Minerals": {
+    "B": ["Basalt"],
+    "C": ["Coal"],
+    "G": ["Granite"],
+    "L": ["Limestone"],
+    "M": ["Marble", "Mica"],
+    "O": ["Obsidian"],
+    "Q": ["Quartz"],
+    "S": ["Sandstone", "Shale", "Slate"]
+  },
+
+  "Gems": {
+    "A": ["Agate", "Amethyst"],
+    "D": ["Diamond"],
+    "E": ["Emerald"],
+    "G": ["Garnet"],
+    "J": ["Jade"],
+    "O": ["Opal"],
+    "R": ["Ruby"],
+    "S": ["Sapphire"],
+    "T": ["Topaz"]
+  },
+
+  "Dinosaur Fossils": {
+    "A": ["Allosaurus", "Ankylosaurus", "Apatosaurus"],
+    "B": ["Brachiosaurus"],
+    "D": ["Deinonychus", "Diplodocus"],
+    "I": ["Iguanodon"],
+    "S": ["Stegosaurus"],
+    "T": ["Triceratops", "Tyrannosaurus"],
+    "V": ["Velociraptor"]
+  },
+
+  "Weather Terms": {
+    "B": ["Breeze"],
+    "C": ["Cloud"],
+    "D": ["Drizzle"],
+    "F": ["Fog", "Frost"],
+    "H": ["Hail", "Humidity"],
+    "L": ["Lightning"],
+    "R": ["Rain", "Rainbow"],
+    "S": ["Sleet", "Snow", "Storm"],
+    "T": ["Thunder"],
+    "W": ["Wind"]
+  },
+
+  "Waterways": {
+    "B": ["Bay", "Brook"],
+    "C": ["Creek"],
+    "L": ["Lake"],
+    "O": ["Ocean"],
+    "P": ["Pond"],
+    "R": ["River"],
+    "S": ["Stream"]
+  },
+
+  "Energy & Electricity": {
+    "B": ["Battery", "Bulb"],
+    "C": ["Circuit", "Current"],
+    "E": ["Energy"],
+    "G": ["Generator"],
+    "L": ["Light"],
+    "M": ["Motor"],
+    "O": ["Outlet"],
+    "S": ["Solar"],
+    "W": ["Watt", "Wind", "Wire"]
+  },
+
+  "Element Names": {
+    "A": ["Aluminum", "Argon"],
+    "B": ["Boron"],
+    "C": ["Calcium", "Carbon", "Copper"],
+    "F": ["Fluorine"],
+    "G": ["Gold"],
+    "H": ["Helium", "Hydrogen"],
+    "I": ["Iodine", "Iron"],
+    "N": ["Neon", "Nitrogen"],
+    "O": ["Oxygen"],
+    "S": ["Silicon", "Sodium", "Sulfur"]
+  },
+
+  "Element Symbols": {
+    "B": ["B"],
+    "C": ["C"],
+    "F": ["F"],
+    "H": ["H"],
+    "I": ["I"],
+    "K": ["K"],
+    "N": ["N"],
+    "O": ["O"],
+    "P": ["P"],
+    "S": ["S"],
+    "U": ["U"],
+    "V": ["V"],
+    "W": ["W"],
+    "Y": ["Y"]
+  },
+
+  "Acids": {
+    "A": ["Acetic", "Ascorbic"],
+    "C": ["Carbonic", "Citric"],
+    "H": ["Hydrochloric"],
+    "S": ["Sulfuric"]
+  },
+
+  "Nutrients & Minerals": {
+    "C": ["Calcium", "Carbohydrate"],
+    "F": ["Fiber", "Fluoride"],
+    "I": ["Iodine", "Iron"],
+    "M": ["Magnesium"],
+    "P": ["Protein"],
+    "V": ["Vitamin"]
+  },
+
+  "Simple Machines": {
+    "I": ["Inclined plane"],
+    "L": ["Lever"],
+    "P": ["Pulley"],
+    "R": ["Ramp"],
+    "S": ["Screw"],
+    "W": ["Wedge", "Wheel"]
+  },
+
+  "Plant Parts": {
+    "B": ["Bark", "Bud"],
+    "F": ["Flower", "Fruit"],
+    "L": ["Leaf"],
+    "R": ["Root"],
+    "S": ["Seed", "Stem"]
+  },
+
+  "States of Matter": {
+    "G": ["Gas"],
+    "L": ["Liquid"],
+    "P": ["Plasma"],
+    "S": ["Solid"]
+  },
+
+  "Colors of the Rainbow": {
+    "B": ["Blue"],
+    "G": ["Green"],
+    "I": ["Indigo"],
+    "O": ["Orange"],
+    "R": ["Red"],
+    "V": ["Violet"],
+    "Y": ["Yellow"]
+  },
+
+  "Life Cycles": {
+    "A": ["Ant"],
+    "B": ["Bee", "Butterfly"],
+    "F": ["Frog"],
+    "L": ["Ladybug"],
+    "P": ["Plant"]
+  },
+
+  "Habitats": {
+    "D": ["Desert"],
+    "F": ["Forest"],
+    "G": ["Grassland"],
+    "J": ["Jungle"],
+    "O": ["Ocean"],
+    "P": ["Pond"],
+    "R": ["Reef"],
+    "T": ["Tundra"],
+    "W": ["Wetland"]
+  },
+
+  "Food Chain": {
+    "C": ["Carnivore", "Consumer"],
+    "D": ["Decomposer"],
+    "H": ["Herbivore"],
+    "O": ["Omnivore"],
+    "P": ["Predator", "Prey", "Producer"]
+  },
+
+  "Human Body Systems": {
+    "C": ["Circulatory"],
+    "D": ["Digestive"],
+    "M": ["Muscular"],
+    "N": ["Nervous"],
+    "R": ["Respiratory"],
+    "S": ["Skeletal"]
+  },
+
+  "Measurement Units": {
+    "C": ["Centimeter"],
+    "G": ["Gram"],
+    "L": ["Liter"],
+    "M": ["Meter"],
+    "S": ["Second"]
+  },
+
+  "Magnets & Electricity": {
+    "B": ["Battery"],
+    "C": ["Circuit"],
+    "M": ["Magnet"],
+    "P": ["Poles"],
+    "W": ["Wire"]
+  },
+
+  "Soil Types": {
+    "C": ["Clay"],
+    "L": ["Loam"],
+    "M": ["Mud"],
+    "S": ["Sand", "Silt"]
+  },
+
+  "Weather Instruments": {
+    "A": ["Anemometer"],
+    "B": ["Barometer"],
+    "R": ["Rain gauge"],
+    "T": ["Thermometer"]
+  },
+
+  "Water Cycle": {
+    "C": ["Condensation"],
+    "E": ["Evaporation"],
+    "P": ["Precipitation"],
+    "R": ["Runoff"]
+  },
+
+  "Moon Phases": {
+    "C": ["Crescent"],
+    "F": ["Full moon"],
+    "G": ["Gibbous"],
+    "N": ["New moon"],
+    "Q": ["Quarter moon"]
+  },
+
+  "Cloud Types": {
+    "C": ["Cirrus", "Cumulus"],
+    "N": ["Nimbus"],
+    "S": ["Stratus"]
+  },
+
+  "Forces & Motion": {
+    "F": ["Force", "Friction"],
+    "G": ["Gravity"],
+    "I": ["Inertia"],
+    "M": ["Motion"],
+    "P": ["Pull", "Push"],
+    "S": ["Speed"]
+  },
+
+  "Scientists (Last Name)": {
+    "A": ["Ampere", "Avogadro", "Archimedes"],
+    "B": ["Bohr", "Boyle", "Babbage"],
+    "C": ["Curie", "Copernicus", "Crick"],
+    "D": ["Darwin", "Dirac", "Doppler"],
+    "E": ["Einstein", "Euler", "Eddington"],
+    "F": ["Faraday", "Fermat", "Feynman"],
+    "G": ["Galileo", "Gauss"],
+    "H": ["Hawking", "Hooke", "Hubble"],
+    "J": ["Joule"],
+    "K": ["Kepler"],
+    "L": ["Lavoisier", "Linnaeus", "Lovelace"],
+    "M": ["Mendel", "Maxwell", "Mendeleev"],
+    "N": ["Newton", "Nobel"],
+    "O": ["Oppenheimer", "Ohm"],
+    "P": ["Pasteur", "Planck", "Pythagoras"],
+    "R": ["Rutherford", "Riemann"],
+    "S": ["Sagan", "Salk", "Schrodinger"],
+    "T": ["Tesla", "Turing"],
+    "U": ["Urey"],
+    "V": ["Volta"],
+    "W": ["Watson", "Watt", "Wright"],
+    "Y": ["Young"],
+    "Z": ["Zwicky"]
+  },
+
+  "Geometry Shapes": {
+    "A": ["Arc"],
+    "C": ["Circle", "Cone", "Cube", "Cylinder"],
+    "D": ["Diamond", "Dodecahedron"],
+    "E": ["Ellipse"],
+    "H": ["Hexagon", "Heptagon"],
+    "I": ["Icosahedron"],
+    "O": ["Octagon", "Octahedron", "Oval"],
+    "P": ["Parallelogram", "Pentagon", "Pyramid"],
+    "R": ["Rhombus", "Rectangle"],
+    "S": ["Square", "Sphere", "Star"],
+    "T": ["Triangle", "Tetrahedron", "Torus"]
+  },
+
+  "Types of Ciphers": {
+    "A": ["Atbash"],
+    "C": ["Caesar"],
+    "E": ["Enigma"],
+    "P": ["Playfair"],
+    "S": ["Substitution", "Stream cipher"],
+    "T": ["Transposition", "Vigenere"]
+  },
+
+  "Programming Languages": {
+    "A": ["Ada"],
+    "B": ["BASIC"],
+    "C": ["C", "C++", "C#"],
+    "F": ["Fortran"],
+    "G": ["Go"],
+    "H": ["HTML"],
+    "J": ["Java", "JavaScript"],
+    "K": ["Kotlin"],
+    "L": ["Lisp"],
+    "M": ["Matlab"],
+    "P": ["Pascal", "Python"],
+    "R": ["R", "Ruby"],
+    "S": ["SQL", "Swift"],
+    "T": ["TypeScript"],
+    "V": ["Visual Basic"]
+  },
+
+  "Geography Terms": {
+    "A": ["Archipelago"],
+    "B": ["Bay", "Basin"],
+    "C": ["Canyon", "Cape"],
+    "D": ["Delta"],
+    "E": ["Estuary"],
+    "F": ["Fjord"],
+    "G": ["Gulf"],
+    "I": ["Isthmus", "Island"],
+    "L": ["Lagoon", "Lake"],
+    "P": ["Peninsula", "Plain", "Plateau"],
+    "R": ["River", "Range"],
+    "V": ["Valley", "Volcano"]
+  },
+
+  "Graphing Terms": {
+    "A": ["Axis"],
+    "B": ["Bar chart"],
+    "H": ["Histogram"],
+    "L": ["Line graph"],
+    "M": ["Mean", "Median", "Mode"],
+    "P": ["Plot", "Point", "Pie chart"],
+    "Q": ["Quadrant"],
+    "S": ["Scale", "Slope"],
+    "T": ["Trend"],
+    "X": ["X-axis"],
+    "Y": ["Y-axis"]
+  },
+
+  "Map Symbols": {
+    "C": ["Compass", "Contour"],
+    "E": ["Elevation"],
+    "G": ["Grid"],
+    "L": ["Legend", "Latitude"],
+    "O": ["Orientation"],
+    "R": ["Road symbol"],
+    "S": ["Scale bar"],
+    "T": ["Topographic"],
+    "X": ["Crosshair"],
+    "Y": ["Yardline (map)"]
+  },
+
+  "Maryland Counties": {
+    "A": ["Allegany", "Anne Arundel"],
+    "B": ["Baltimore County", "Baltimore City"],
+    "C": ["Calvert", "Caroline", "Carroll", "Cecil", "Charles"],
+    "D": ["Dorchester"],
+    "F": ["Frederick"],
+    "G": ["Garrett"],
+    "H": ["Harford", "Howard"],
+    "K": ["Kent"],
+    "M": ["Montgomery"],
+    "P": ["Prince George's"],
+    "Q": ["Queen Anne's"],
+    "S": ["St. Mary's", "Somerset"],
+    "T": ["Talbot"],
+    "W": ["Washington", "Wicomico", "Worcester"]
+  },
+
+  "Maryland Waterways": {
+    "C": ["Chesapeake Bay", "Choptank River", "Chester River"],
+    "P": ["Potomac River", "Patapsco River", "Patuxent River"],
+    "S": ["Susquehanna River"],
+    "N": ["Nanticoke River"],
+    "M": ["Monocacy River", "Magothy River"],
+    "W": ["Wicomico River"],
+    "T": ["Tred Avon River"]
+  },
+
+  "Geologic Time Scale": {
+    "P": ["Precambrian", "Paleozoic", "Permian"],
+    "M": ["Mesozoic"],
+    "C": ["Cenozoic", "Cambrian", "Carboniferous"],
+    "J": ["Jurassic"],
+    "T": ["Triassic"],
+    "Q": ["Quaternary"],
+    "O": ["Ordovician"],
+    "S": ["Silurian"]
+  }
+}
