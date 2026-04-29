@@ -97,7 +97,7 @@ body.light-mode{
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.dropdown-menu{position:absolute;left:0;top:calc(100% + 8px);min-width:320px;max-width:420px;background:var(--panel-start);border-radius:12px;box-shadow:0 18px 40px rgba(2,12,14,0.5);border:1px solid rgba(17,68,70,0.08);z-index:1400;overflow:hidden;display:none}
+.dropdown-menu{position:absolute;left:0;top:calc(100% + 8px);min-width:320px;max-width:420px;background:var(--panel-start);border-radius:12px;box-shadow:0 18px 40px rgba(2,12,14,0.5);border:1px solid rgba(17,68,70,0.08);z-index:1400;overflow:hidden;display:none;padding:8px 12px}
 .dropdown-header{
   padding:14px 18px;
   font-weight:900;
@@ -130,6 +130,23 @@ body.light-mode{
 .dropdown-list li.selected::before{content:'';position:absolute;left:18px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 4px rgba(47,143,152,0.08)}
 .dropdown-list::-webkit-scrollbar{width:12px}
 .dropdown-list::-webkit-scrollbar-thumb{background:rgba(17,68,70,0.12);border-radius:8px}
+
+/* Settings dropdown specific styling: right-align the menu and make it slightly narrower */
+#settingsDropdown .dropdown-menu{left:auto;right:0;min-width:260px;max-width:320px}
+.settings-container{margin-left:12px;display:flex;align-items:center}
+.settings-icon{display:inline-block;margin-right:8px;font-size:1.05rem;line-height:1}
+.settings-toggle{padding:10px 14px;border-radius:14px;display:inline-flex;align-items:center;gap:8px;font-weight:800}
+
+/* Make the filters area take remaining space so settings can sit flush right */
+.header-right .filters-bar{flex:1}
+
+/* Add spacing between Settings menu buttons and make them full-width */
+.settings-list{display:flex;flex-direction:column;gap:10px;padding:8px}
+.settings-list .settings-item{margin:0}
+.settings-list .settings-item .dropdown-toggle{width:100%;text-align:left;padding:12px 16px;border-radius:12px}
+
+/* Slightly reduce the menu padding for the smaller settings menu to keep density */
+#settingsDropdown .dropdown-menu{padding:10px}
 .left,.right{flex:1;background:var(--panel-start);padding:20px;border-radius:18px;border:1px solid rgba(17,68,70,0.04);min-height:calc(100vh - 320px);display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(15,55,56,0.04);position:relative}
 .controls button:hover{background:rgba(17,98,176,0.12)}
 .pill{display:block}

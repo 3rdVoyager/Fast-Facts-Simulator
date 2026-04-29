@@ -133,6 +133,8 @@ const refs = {
   modeToggle: document.getElementById('modeToggle'),
   modeMenu: document.getElementById('modeMenu'),
   modeList: document.getElementById('modeList'),
+  settingsToggle: document.getElementById('settingsToggle'),
+  settingsMenu: document.getElementById('settingsMenu'),
   // displays / inputs
   categoryDisplay: document.getElementById('categoryDisplay'),
   categoryDescription: document.getElementById('categoryDescription'),
@@ -203,7 +205,7 @@ function populateControls(){
       if(m.v==='easy') li.classList.add('selected');
       refs.modeList.appendChild(li);
     });
-    if(refs.modeToggle){ refs.modeToggle.dataset.value = 'easy'; refs.modeToggle.textContent = 'Mode: Easy ▾'; }
+    if(refs.modeToggle){ refs.modeToggle.dataset.value = 'easy'; refs.modeToggle.textContent = 'Mode: Easy'; }
   }
 }
 
@@ -257,7 +259,7 @@ function populateControls(){
       // mode
       if(obj.mode){
         if(refs.modeSelect){ refs.modeSelect.value = obj.mode; }
-        if(refs.modeToggle){ refs.modeToggle.dataset.value = obj.mode; refs.modeToggle.textContent = `Mode: ${obj.mode.charAt(0).toUpperCase()+obj.mode.slice(1)} ▾`; }
+        if(refs.modeToggle){ refs.modeToggle.dataset.value = obj.mode; refs.modeToggle.textContent = `Mode: ${obj.mode.charAt(0).toUpperCase()+obj.mode.slice(1)}`; }
         if(refs.modeList){ Array.from(refs.modeList.children).forEach(li=> li.classList.toggle('selected', li.dataset.value === obj.mode)); }
       }
       // autoMove
@@ -403,7 +405,6 @@ function resetScore(){
   state.score = defaultScore();
   saveScoreToStorage();
   updateScoreUI();
-  showToast('Score reset');
 }
 
 function showToast(text, type){
@@ -901,7 +902,7 @@ if(refs.themeToggle){
   // use onclick assignment so the handler is single and robust
   refs.themeToggle.onclick = function(){
     const isLight = document.body.classList.toggle('light-mode');
-    refs.themeToggle.textContent = isLight ? '☀️' : '🌙';
+    refs.themeToggle.textContent = isLight ? 'Light Mode ☀️' : 'Dark Mode 🌙';
     refs.themeToggle.setAttribute('aria-pressed', String(isLight));
   };
 }
@@ -950,6 +951,11 @@ if(refs.categoryToggle && refs.categoryMenu && refs.categoryList){
       refs.modeMenu.style.display = 'none';
       refs.modeToggle.setAttribute('aria-expanded', 'false');
     }
+    if(refs.settingsMenu && !(refs.settingsMenu.contains(e.target) || (refs.settingsToggle && refs.settingsToggle.contains(e.target)))){
+      refs.settingsMenu.setAttribute('aria-hidden', 'true');
+      refs.settingsMenu.style.display = 'none';
+      if(refs.settingsToggle) refs.settingsToggle.setAttribute('aria-expanded', 'false');
+    }
   });
 }
 
@@ -976,7 +982,17 @@ if(refs.timerToggle && refs.timerMenu && refs.timerList){
   });
 }
 
-// Mode dropdown interactions
+// Settings dropdown interactions
+if(refs.settingsToggle && refs.settingsMenu){
+  refs.settingsToggle.addEventListener('click', ()=>{
+    const open = refs.settingsMenu.getAttribute('aria-hidden') === 'false';
+    refs.settingsMenu.setAttribute('aria-hidden', String(open));
+    refs.settingsMenu.style.display = open ? 'none' : 'block';
+    refs.settingsToggle.setAttribute('aria-expanded', String(!open));
+  });
+}
+
+// Mode control: either a custom dropdown (modeList present) or a cycling button inside Settings
 if(refs.modeToggle && refs.modeMenu && refs.modeList){
   refs.modeToggle.addEventListener('click', ()=>{
     const open = refs.modeMenu.getAttribute('aria-hidden') === 'false';
@@ -991,12 +1007,31 @@ if(refs.modeToggle && refs.modeMenu && refs.modeList){
     const val = li.dataset.value || 'easy';
     refs.modeToggle.dataset.value = val;
     refs.modeToggle.textContent = `Mode: ${li.textContent} ▾`;
-    // keep menu open (do not close on selection)
     // persist and start a new round when mode filter is changed
     // When changing modes, reset saved sessions/scores
     saveFiltersToStorage();
     resetScore();
     showToast(`Switched mode to ${li.textContent}; scores reset`);
+    nextRound();
+  });
+} else if(refs.modeToggle && !refs.modeList){
+  // cycling button inside Settings
+  const _modes = ['easy','medium','hard'];
+  const setModeUI = (m)=>{
+    refs.modeToggle.dataset.value = m;
+    refs.modeToggle.textContent = `Mode: ${m.charAt(0).toUpperCase()+m.slice(1)}`;
+  };
+  // ensure a default
+  if(!refs.modeToggle.dataset || !refs.modeToggle.dataset.value) setModeUI('easy');
+  refs.modeToggle.addEventListener('click', ()=>{
+    const cur = refs.modeToggle.dataset.value || 'easy';
+    const idx = _modes.indexOf(cur);
+    const next = _modes[(idx+1)%_modes.length];
+    setModeUI(next);
+    // persist and reset scores/sessions when mode changes
+    saveFiltersToStorage();
+    resetScore();
+    showToast(`Switched mode to ${next.charAt(0).toUpperCase()+next.slice(1)}; scores reset`);
     nextRound();
   });
 }

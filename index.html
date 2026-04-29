@@ -37,29 +37,29 @@
                 </ul>
               </div>
             </div>
-            <div class="dropdown" id="modeDropdown">
-              <button id="modeToggle" class="dropdown-toggle" aria-expanded="false">Mode: Easy ▾</button>
-              <div id="modeMenu" class="dropdown-menu" aria-hidden="true">
-                <div class="dropdown-header">Mode</div>
-                <ul id="modeList" class="dropdown-list">
-                  <!-- populated dynamically -->
-                </ul>
-              </div>
-            </div>
-            <div class="control-inline">
-              <button id="autoToggle" class="dropdown-toggle" aria-pressed="false">Auto Move: Off</button>
-            </div>
+            <!-- Mode control moved into Settings (see Settings menu) -->
+            <!-- settings moved to header-right far right for better layout -->
             <div class="control-inline">
               <button id="instructionsBtn" class="dropdown-toggle" aria-haspopup="dialog" aria-controls="instructionsModal">Instructions</button>
-            </div>
-            <div class="control-inline">
-              <button id="resetScoreBtn" class="dropdown-toggle">Reset Scores</button>
             </div>
             <!-- startBtn moved to the left panel under Hint/Reveal -->
           </div>
         </div>
-        <!-- Theme toggle placed upper-right -->
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light theme">🌙</button>
+        <!-- theme/control moved into Settings dropdown -->
+        <div class="settings-container">
+          <div class="dropdown settings-dropdown" id="settingsDropdown">
+            <button id="settingsToggle" class="dropdown-toggle settings-toggle" aria-expanded="false"><span class="settings-icon" aria-hidden="true">⚙️</span> Settings ▾</button>
+            <div id="settingsMenu" class="dropdown-menu" aria-hidden="true">
+              <div class="dropdown-header">Settings</div>
+              <div class="dropdown-list settings-list" role="menu">
+                <div class="settings-item"><button id="modeToggle" class="dropdown-toggle" aria-pressed="false">Mode: Easy</button></div>
+                <div class="settings-item"><button id="autoToggle" class="dropdown-toggle" aria-pressed="false">Auto Move: Off</button></div>
+                <div class="settings-item"><button id="resetScoreBtn" class="dropdown-toggle">Reset Scores</button></div>
+                <div class="settings-item"><button id="themeToggle" class="dropdown-toggle" aria-label="Toggle dark/light theme">Dark Mode 🌙</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
